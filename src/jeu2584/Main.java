@@ -15,7 +15,7 @@ public class Main implements Parametres {
         System.out.println(g1);
         Scanner sc = new Scanner(System.in);
 
-        while (!g.partieFinie2584() || !g1.partieFinie2584()) {
+        while (!g.partieFinie2584() && !g1.partieFinie2584()) {
             for (int i = 0; i < 2; i++) {
                 System.out.println("Grille joueur " + (i + 1));
                 String[] t = new String[4];

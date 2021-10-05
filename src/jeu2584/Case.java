@@ -128,4 +128,44 @@ public class Case implements Parametres {
         return "Case(" + this.x + "," + this.y + "," + this.valeur + ")";
     }
 
+    //choisit de déterminer la couleur avec une fonction, dans le controlleur. Possibilité alternative de directement mettre un attribut couleur dans
+    //la case
+    public String detCouleur() {
+        switch (this.valeur) {
+            case 2:
+                return "ede0c8";
+            case 3:
+                return "f2b179";
+            case 5:
+                return "f59563";
+            case 8:
+                return "f67c60";
+            case 13:
+                return "f65e3b";
+            case 21:
+                return "edcf73";
+            case 34:
+                return "edcc62";
+            case 55:
+                return "edc850";
+            case 89:
+                return "edc53f";
+            case 144:
+                return "edc22d";
+            case 233:
+                return "e8ed2d";
+            case 377:
+                return "f0f373";
+            case 610:
+                return "f8f9b9";
+            case 987:
+                return "b9f8f9";
+            case 1597:
+                return "b9e8f9";
+            case 2584:
+                return "b9d8f9";
+            default:
+                return "eee4da";
+        }
+    }
 }

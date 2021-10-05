@@ -290,10 +290,20 @@ public class Grille implements Parametres {
         System.out.println("Bravo ! Vous avez atteint " + this.valeurMax);
         System.exit(0);
     }
+    
+    public String victory2584() {
+        System.out.println("Bravo ! Vous avez atteint " + this.valeurMax);
+        return "Bravo ! Vous avez atteint " + this.valeurMax;
+    }
 
     public void gameOver() {
         System.out.println("La partie est finie. Votre score est " + this.valeurMax);
         System.exit(1);
+    }
+
+    public String gameOver2584() {
+        System.out.println("La partie est finie. Votre score est " + this.score);
+        return "La partie est finie. Votre score est " + this.score;
     }
 
     // à condition qu’il reste des emplacements vides dans la grille, positionne aléatoirement (là où il n’y a pas déjà une case) une case avec une 
@@ -355,7 +365,7 @@ public class Grille implements Parametres {
             return false;
         }
     }
-    
+
     public Case nouvelleCase2584GUI() {
         if (this.grille.size() < TAILLE * TAILLE) {
             ArrayList<Case> casesLibres = new ArrayList<>();
