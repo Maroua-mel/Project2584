@@ -47,11 +47,11 @@ public class Grille implements Parametres {
         int[][] tableau = new int[TAILLE][TAILLE];
         for (Case c : this.grille) {
             tableau[c.getY()][c.getX()] = c.getValeur();
-        }
+    }
         String result = "<html>";
         for (int i = 0; i < tableau.length; i++) {
             result += Arrays.toString(tableau[i]) + "<br/>";
-        }
+    }
         result += "</html>";
         return result;
     }
@@ -86,6 +86,8 @@ public class Grille implements Parametres {
         return true;
     }
 
+    // lanceur de la méthode récursive (les paramètres à passer à cette dernière ne sont pas les mêmes suivant la direction). Retourne 
+    //vrai si au moins une case à bouger (pour éviter de rajouter une nouvelle case si aucun déplacement n’a été possible dans cette direction)
     public boolean lanceurDeplacerCases2584(int direction) {
         Case[] extremites = this.getCasesExtremites(direction);
         deplacement = false; // pour vérifier si on a bougé au moins une case après le déplacement, avant d'en rajouter une nouvelle
@@ -207,6 +209,8 @@ public class Grille implements Parametres {
         return "La partie est finie. Votre score est de " + this.score + ".";
     }
 
+    // à condition qu’il reste des emplacements vides dans la grille, positionne aléatoirement (là où il n’y a pas déjà une case) une case avec une 
+    //valeur aléatoire qui peut être soit 2, soit 4. La méthode nouvelleCase retourne un booléen, selon si elle a réussi à ajouter une case ou pas
     public boolean nouvelleCase2584() {
         if (this.grille.size() < TAILLE * TAILLE) {
             ArrayList<Case> casesLibres = new ArrayList<>();
@@ -235,6 +239,37 @@ public class Grille implements Parametres {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public Case nouvelleCase2584GUI() {
+        if (this.grille.size() < TAILLE * TAILLE) {
+            ArrayList<Case> casesLibres = new ArrayList<>();
+            Random ra = new Random();
+            int valeur = 1;
+            double ra1 = Math.random();
+            if (ra1 > 0.75) {
+                valeur = 2;
+            }
+            // on crée toutes les cases encore libres
+            for (int x = 0; x < TAILLE; x++) {
+                for (int y = 0; y < TAILLE; y++) {
+                    Case c = new Case(x, y, valeur);
+                    if (!this.grille.contains(c)) { // contains utilise la méthode equals dans Case
+                        casesLibres.add(c);
+                    }
+                }
+            }
+            // on en choisit une au hasard et on l'ajoute à la grille
+            Case ajout = casesLibres.get(ra.nextInt(casesLibres.size()));
+            ajout.setGrille(this);
+            this.grille.add(ajout);
+            if ((this.grille.size() == 1) || (this.valeurMax == 2 && ajout.getValeur() == 4)) { // Mise à jour de la valeur maximale présente dans la grille si c'est la première case ajoutée ou si on ajoute un 4 et que l'ancien max était 2
+                this.valeurMax = ajout.getValeur();
+            }
+            return ajout;
+        } else {
+            return null;
         }
     }
 }
