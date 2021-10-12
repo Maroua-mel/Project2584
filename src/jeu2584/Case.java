@@ -54,8 +54,8 @@ public class Case implements Parametres {
     }
 
     @Override
-    public boolean equals(Object obj) { // la méthode equals est utilisée lors de l'ajout d'une case à un ensemble pour vérifier qu'il n'y a pas de doublons (teste parmi tous les candidats qui ont le même hashcode)
-        if (obj instanceof Case) {
+    public boolean equals(Object obj) { // la méthode equals est utilisée lors de l'ajout d'une case à un ensemble pour vérifier qu'il n'y a pas de doublons
+        if (obj instanceof Case) { // (teste parmi tous les candidats qui ont le même hashcode)
             Case c = (Case) obj;
             return (this.x == c.x && this.y == c.y);
         } else {
@@ -87,38 +87,45 @@ public class Case implements Parametres {
 
     //prend en paramètre une direction et retourne la première case rencontrée dans cette direction en partant de la case courante
     public Case getVoisinDirect(int direction) {
-        if (direction == HAUT) {
-            for (int i = this.y - 1; i >= 0; i--) {
-                for (Case c : grille.getGrille()) {
-                    if (c.getX() == this.x && c.getY() == i) {
-                        return c;
+        switch (direction) {
+            case HAUT:
+                for (int i = this.y - 1; i >= 0; i--) {
+                    for (Case c : grille.getGrille()) {
+                        if (c.getX() == this.x && c.getY() == i) {
+                            return c;
+                        }
                     }
                 }
-            }
-        } else if (direction == BAS) {
-            for (int i = this.y + 1; i < TAILLE; i++) {
-                for (Case c : grille.getGrille()) {
-                    if (c.getX() == this.x && c.getY() == i) {
-                        return c;
+                break;
+            case BAS:
+                for (int i = this.y + 1; i < TAILLE; i++) {
+                    for (Case c : grille.getGrille()) {
+                        if (c.getX() == this.x && c.getY() == i) {
+                            return c;
+                        }
                     }
                 }
-            }
-        } else if (direction == GAUCHE) {
-            for (int i = this.x - 1; i >= 0; i--) {
-                for (Case c : grille.getGrille()) {
-                    if (c.getX() == i && c.getY() == this.y) {
-                        return c;
+                break;
+            case GAUCHE:
+                for (int i = this.x - 1; i >= 0; i--) {
+                    for (Case c : grille.getGrille()) {
+                        if (c.getX() == i && c.getY() == this.y) {
+                            return c;
+                        }
                     }
                 }
-            }
-        } else if (direction == DROITE) {
-            for (int i = this.x + 1; i < TAILLE; i++) {
-                for (Case c : grille.getGrille()) {
-                    if (c.getX() == i && c.getY() == this.y) {
-                        return c;
+                break;
+            case DROITE:
+                for (int i = this.x + 1; i < TAILLE; i++) {
+                    for (Case c : grille.getGrille()) {
+                        if (c.getX() == i && c.getY() == this.y) {
+                            return c;
+                        }
                     }
                 }
-            }
+                break;
+            default:
+                break;
         }
         return null;
     }
