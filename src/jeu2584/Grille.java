@@ -12,8 +12,8 @@ import static jeu2584.Parametres.TAILLE;
 
 public class Grille implements Parametres {
 
-    private final HashSet<Case> grille;
-    private int valeurMax = 0, score = 0;
+    private HashSet<Case> grille;
+    private int valeurMax = 0, score = 0, hScore;
     private boolean deplacement;
 
     public Grille() {
@@ -43,21 +43,12 @@ public class Grille implements Parametres {
         return result;
     }
 
-    public String toHTML() {
-        int[][] tableau = new int[TAILLE][TAILLE];
-        for (Case c : this.grille) {
-            tableau[c.getY()][c.getX()] = c.getValeur();
-    }
-        String result = "<html>";
-        for (int i = 0; i < tableau.length; i++) {
-            result += Arrays.toString(tableau[i]) + "<br/>";
-    }
-        result += "</html>";
-        return result;
-    }
-
     public HashSet<Case> getGrille() {
         return grille;
+    }
+
+    public int getHScore() {
+        return this.hScore;
     }
 
     public int getValeurMax() {
@@ -66,6 +57,10 @@ public class Grille implements Parametres {
 
     public int getScore() {
         return score;
+    }
+
+    public void setHScore(int s) {
+        this.hScore = s;
     }
 
     public boolean partieFinie2584() {
@@ -170,15 +165,14 @@ public class Grille implements Parametres {
     * Si direction = GAUCHE : retourne les 4 cases qui sont le plus à gauche (une pour chaque ligne)
     * Attention : le tableau retourné peut contenir des null si les lignes/colonnes sont vides
      */
-    // retourne sous forme d’un tableau les 4 cases les plus proches de la direction choisie. Dans l’exemple ci-dessous, si la direction est droite, les 
-    //cases à l’extrémité sont en rouge. Comme la deuxième ligne est vide, la deuxième case du tableau contient null.
+    // retourne sous forme d’un tableau les 4 cases les plus proches de la direction choisie.
     public Case[] getCasesExtremites(int direction) {
         Case[] result = new Case[TAILLE];
         for (Case c : this.grille) {
             switch (direction) {
                 case HAUT:
-                    if ((result[c.getX()] == null) || (result[c.getX()].getY() > c.getY())) { // si on n'avait pas encore de case pour cette rangée ou si on a trouvé un meilleur candidat
-                        result[c.getX()] = c;
+                    if ((result[c.getX()] == null) || (result[c.getX()].getY() > c.getY())) { // si on n'avait pas encore de case pour cette rangée
+                        result[c.getX()] = c; //ou si on a trouvé un meilleur candidat
                     }
                     break;
                 case BAS:
@@ -210,7 +204,7 @@ public class Grille implements Parametres {
     }
 
     // à condition qu’il reste des emplacements vides dans la grille, positionne aléatoirement (là où il n’y a pas déjà une case) une case avec une 
-    //valeur aléatoire qui peut être soit 2, soit 4. La méthode nouvelleCase retourne un booléen, selon si elle a réussi à ajouter une case ou pas
+    //valeur aléatoire qui peut être soit 1, soit 2. La méthode nouvelleCase2584 retourne un booléen, selon si elle a réussi à ajouter une case ou pas
     public boolean nouvelleCase2584() {
         if (this.grille.size() < TAILLE * TAILLE) {
             ArrayList<Case> casesLibres = new ArrayList<>();
@@ -233,8 +227,8 @@ public class Grille implements Parametres {
             Case ajout = casesLibres.get(ra.nextInt(casesLibres.size()));
             ajout.setGrille(this);
             this.grille.add(ajout);
-            if ((this.grille.size() == 1) || (this.valeurMax == 2 && ajout.getValeur() == 4)) { // Mise à jour de la valeur maximale présente dans la grille si c'est la première case ajoutée ou si on ajoute un 4 et que l'ancien max était 2
-                this.valeurMax = ajout.getValeur();
+            if ((this.grille.size() == 1) || (this.valeurMax == 2 && ajout.getValeur() == 3)) { // Mise à jour de la valeur maximale présente dans la grille
+                this.valeurMax = ajout.getValeur(); //si c'est la première case ajoutée ou si on ajoute un 3 et que l'ancien max était 2
             }
             return true;
         } else {
@@ -242,6 +236,8 @@ public class Grille implements Parametres {
         }
     }
 
+    // à condition qu’il reste des emplacements vides dans la grille, renvoie une case à positionner aléatoirement (là où il n’y a pas déjà une case) une case avec une 
+    //valeur aléatoire qui peut être soit 1, soit 2. La méthode nouvelleCase2584GUI retourne une case, selon si elle a réussi à ajouter une case ou pas
     public Case nouvelleCase2584GUI() {
         if (this.grille.size() < TAILLE * TAILLE) {
             ArrayList<Case> casesLibres = new ArrayList<>();
@@ -264,8 +260,8 @@ public class Grille implements Parametres {
             Case ajout = casesLibres.get(ra.nextInt(casesLibres.size()));
             ajout.setGrille(this);
             this.grille.add(ajout);
-            if ((this.grille.size() == 1) || (this.valeurMax == 2 && ajout.getValeur() == 4)) { // Mise à jour de la valeur maximale présente dans la grille si c'est la première case ajoutée ou si on ajoute un 4 et que l'ancien max était 2
-                this.valeurMax = ajout.getValeur();
+            if ((this.grille.size() == 1) || (this.valeurMax == 2 && ajout.getValeur() == 3)) { // Mise à jour de la valeur maximale présente dans la grille 
+                this.valeurMax = ajout.getValeur(); //si c'est la première case ajoutée ou si on ajoute un 3 et que l'ancien max était 2
             }
             return ajout;
         } else {
