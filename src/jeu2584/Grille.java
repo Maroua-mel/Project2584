@@ -13,7 +13,7 @@ import static jeu2584.Parametres.TAILLE;
 public class Grille implements Parametres {
 
     private HashSet<Case> grille;
-    private int valeurMax = 0, score = 0, hScore;
+    private int valeurMax = 0, score = 0;
     private boolean deplacement;
 
     public Grille() {
@@ -47,20 +47,12 @@ public class Grille implements Parametres {
         return grille;
     }
 
-    public int getHScore() {
-        return this.hScore;
-    }
-
     public int getValeurMax() {
         return valeurMax;
     }
 
     public int getScore() {
         return score;
-    }
-
-    public void setHScore(int s) {
-        this.hScore = s;
     }
 
     public boolean partieFinie2584() {
@@ -147,8 +139,12 @@ public class Grille implements Parametres {
             if (voisin != null) {
                 if (extremites[rangee].valeur2584(voisin)) {
                     this.fusion2584(extremites[rangee], voisin);
+                    int x = extremites[rangee].getX();
+                    int y = extremites[rangee].getY();
                     extremites[rangee] = voisin.getVoisinDirect(-direction);
                     this.grille.remove(voisin);
+                    voisin.setX(x);
+                    voisin.setY(y);
                     this.deplacerCasesRecursif2584(extremites, rangee, direction, compteur + 1);
                 } else {
                     extremites[rangee] = voisin;
@@ -269,4 +265,3 @@ public class Grille implements Parametres {
         }
     }
 }
-

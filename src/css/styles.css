@@ -14,7 +14,7 @@ AnchorPane {
 GridPane {
     -fx-grid-lines-visible: true;
     -fx-background-radius: 5px;
-/*    -fx-background-color: #bbada0; */
+    /*    -fx-background-color: #bbada0; */
 }
 
 Line {
@@ -26,7 +26,7 @@ Line {
     -fx-font-size: 40;
 }
 
-Label, Button {
+Label, Button, CheckBox {
     -fx-text-fill: #776E65;
     -fx-font-family: 'Clear Sans';
     -fx-font-size: 15;
