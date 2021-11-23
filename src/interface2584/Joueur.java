@@ -2,10 +2,12 @@ package interface2584;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -16,10 +18,11 @@ import outils.Parser;
 
 public class Joueur implements Serializable {
 
-    public Grille grilleModele;
+    public Grille grilleModele, grillePrec;
     private int hScore = 0, nbMouvements = 0;
     public Label labelScore, labelHScore;
     public GridPane grilleAffichage;
+    public Button buttonAnnuler;
     private long dernierEJ;
     private ArrayList<Tuile> listeTuileJ = new ArrayList<>();
     private ParallelTransition parallelTransition = new ParallelTransition();
@@ -37,6 +40,7 @@ public class Joueur implements Serializable {
     }
 
     private void communsJoueur(GridPane g, Label s, Label hS) { //rassemble les éléments communs aux 2 constructeurs possibles pour joueur
+        this.grillePrec = new Grille();
         this.dernierEJ = System.currentTimeMillis();
         grilleAffichage = g;
         labelScore = s;
@@ -141,5 +145,19 @@ public class Joueur implements Serializable {
         });
 
         parallelTransition.getChildren().add(translateTransition);
+    }
+
+    public void chargerJoueur(int n) {
+        Parser p = new Parser("sauvegarde.2584");
+        int[] t = p.parseInfoJoueur(n);
+        this.hScore = t[1]; //affecte le meilleur score récupéré dans le fichier au joueur
+        int h = Integer.parseInt(labelHScore.getText()); //met le label meilleur score à jour si nécessaire
+        if (this.hScore > h) { //le mettre à jour quoi qu'il arrive plutôt ?
+            labelHScore.setText(String.valueOf(this.hScore));
+        }
+        this.grilleModele = p.parseGrille(n); //affecte la grille principale récupérée dans le fichier au joueur
+        this.labelScore.setText(String.valueOf(grilleModele.getScore())); //met à jour le label avec le score de la grille
+        this.grillePrec = p.parseGrille(6 + n); //affecte la grille précédente récupérée dans le fichier au joueur
+        this.creerGrille(); //affiche la grille
     }
 }

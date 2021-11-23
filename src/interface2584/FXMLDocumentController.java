@@ -13,6 +13,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
@@ -24,6 +25,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jeu2584.Grille;
 import outils.ConnexionBDD;
+import outils.Parser;
 
 public class FXMLDocumentController implements Initializable, jeu2584.Parametres {
 
@@ -35,11 +37,15 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
     private GridPane grille, grille2;
     @FXML
     private Pane fond; // panneau recouvrant toute la fenêtre
+    @FXML
+    private Button annuler, annuler2;
+    @FXML
+    private MenuItem sauvegarder;
 
     // variables globales non définies dans la vue (fichier .fxml)
     private long dureePartie;
     private Joueur j1, j2;
-    private boolean partieT = true, partieR = false; //partieT : si la partie est terminée, pour bloquer les boutons/touches. partieR : si partie est en mode rapide
+    private boolean partieT = true, partieR = false, partieM; //partieT : si la partie est terminée, pour bloquer les boutons/touches. partieR : si partie est en mode rapide
 
     private void affichageGameOver(String s, double n) { //place un pane et un label devant une grilleAffichage quand la partie est finie
         Pane p = new Pane();
@@ -71,6 +77,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
             affichageGameOver(j2.grilleModele.victory2584(), 18.37);
         }
         partieT = true;
+        sauvegarder.setDisable(true); //désactive le bouton pour sauvegarder
 
         //score, tuile maximum atteinte, nombre de déplacements effectués de chaque joueur et durée de la partie
         ConnexionBDD c = new ConnexionBDD();
@@ -139,6 +146,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
 
     @FXML
     private void keyPressed(KeyEvent ke) {
+        sauvegarder.setDisable(false); //réactive la touche pour sauvegarder 
         System.out.println("touche appuyée");
         if (!partieT) {
             if (!j1.grilleModele.partieFinie2584() && !j2.grilleModele.partieFinie2584()) {
@@ -205,6 +213,20 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
     @FXML
     private void fermer() {
         System.exit(0);
+    }
+
+    @FXML
+    private void enregistrer() {
+        Parser p = new Parser("sauvegarde.2584");
+        p.sauvegarderGrille(j1, false); //sauvegarde en effacant les données précédentes
+        p.sauvegarderGrille(j2, true); //sauvegarde en conservant les données présentes dans le fichier
+    }
+
+    @FXML
+    private void charger() {
+        nouvellePartie(false); //pas bien bouh c'est nul
+        j1.chargerJoueur(1);
+        j2.chargerJoueur(13);
     }
 
     @FXML

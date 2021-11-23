@@ -59,7 +59,7 @@ public class Main implements Parametres {
                             b = g1.nouvelleCase2584();
                         }
                         if (!b) {
-                            g.gameOver();
+                            g.gameOver2584();
                         }
                     }
                 }
@@ -71,13 +71,13 @@ public class Main implements Parametres {
                     System.out.println(g1.getScore());
                 }
                 if (g.getValeurMax() >= OBJECTIF2584) {
-                    g.victory();
+                    g.victory2584();
                 } else if (g1.getValeurMax() >= OBJECTIF2584) {
-                    g1.victory();
+                    g1.victory2584();
                 }
             }
         }
-        g.gameOver();
+        g.gameOver2584();
     }
 
 }
