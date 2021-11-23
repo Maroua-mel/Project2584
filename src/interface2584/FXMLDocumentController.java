@@ -1,66 +1,47 @@
 package interface2584;
 
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import jeu2584.Case;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import jeu2584.Grille;
-//import javafx.scene.paint.Color;
-//import javafx.scene.text.Font;
+import outils.ConnexionBDD;
 
 public class FXMLDocumentController implements Initializable, jeu2584.Parametres {
 
-    /*
-     * Variables globales correspondant à des objets définis dans la vue (fichier .fxml)
-     * Ces variables sont ajoutées à la main et portent le même nom que les fx:id dans Scene Builder
-     */
+    //Variables globales correspondant à des objets définis dans la vue (fichier .fxml) 
+    //Ces variables sont ajoutées à la main et portent le même nom que les fx:ID dans Scene Builder
     @FXML
-    private Label score;
+    private Label score, score2, hScore, hScore2;
     @FXML
-    private GridPane grille;
-    @FXML
-    private Label score2;
-    @FXML
-    private GridPane grille2;
+    private GridPane grille, grille2;
     @FXML
     private Pane fond; // panneau recouvrant toute la fenêtre
 
-    // variable globale pour initialiser le modèle
-    private Grille grilleModele;
-    private Grille grilleModele2;
-
     // variables globales non définies dans la vue (fichier .fxml)
-    private boolean partieT = true;
+    private long dureePartie;
+    private Joueur j1, j2;
+    private boolean partieT = true, partieR = false; //partieT : si la partie est terminée, pour bloquer les boutons/touches. partieR : si partie est en mode rapide
 
-    private void creerCase(Case c, boolean b) { //ajoute une case dans la grille définie par la boolean
-        Pane p = new Pane();
-        p.getStyleClass().add("pane");
-        p.setStyle("-fx-background-color: #" + c.detCouleur());
-        Label l = new Label();
-        l.getStyleClass().add("tuile");
-        if (b) {
-            grille.add(p, c.getX(), c.getY()); //le label et la case sont séparément liées à la grille pour que le label soit centré
-            grille.add(l, c.getX(), c.getY());
-        } else {
-            grille2.add(p, c.getX(), c.getY()); //le label et la case sont séparément liées à la grille pour que le label soit centré
-            grille2.add(l, c.getX(), c.getY());
-        }
-        GridPane.setHalignment(l, HPos.CENTER);
-        l.setText(String.valueOf(c.getValeur()));
-        p.setVisible(true);
-        l.setVisible(true);
-    }
-
-    private void affichageGameOver(String s, double n) { //place un pane et un label devant une grille quand la partie est finie
+    private void affichageGameOver(String s, double n) { //place un pane et un label devant une grilleAffichage quand la partie est finie
         Pane p = new Pane();
         fond.getChildren().add(p);
         p.getStyleClass().add("pane");
@@ -71,7 +52,6 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         p.setStyle("-fx-background-color: #fff9f1bf");
 
         Label l = new Label();
-        l.getStyleClass().add("tuile");
         l.setText(s);
         p.getChildren().add(l);
         l.setPrefWidth(397);
@@ -82,157 +62,214 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         p.setVisible(true);
     }
 
+    private void finPartie(boolean v) {
+        if (v) {
+            affichageGameOver(j1.grilleModele.victory2584(), 1);
+            affichageGameOver(j2.grilleModele.gameOver2584(), 18.37);
+        } else {
+            affichageGameOver(j1.grilleModele.gameOver2584(), 1);
+            affichageGameOver(j2.grilleModele.victory2584(), 18.37);
+        }
+        partieT = true;
+
+        //score, tuile maximum atteinte, nombre de déplacements effectués de chaque joueur et durée de la partie
+        ConnexionBDD c = new ConnexionBDD();
+        String query = j1.grilleModele.getScore() + ", " + j2.grilleModele.getScore() + ", " + j1.grilleModele.getValeurMax() + ", " + j2.grilleModele.getValeurMax()
+                + ", " + j1.getNbMouvements() + ", " + j2.getNbMouvements() + ", " + (System.currentTimeMillis() - dureePartie);
+        c.insertTuples(query);
+    }
+
+    private void nouvellePartie(boolean b) {
+        if (fond.getChildren().size() > 16) { //supprime les panes semi-transparents de fin de partie, si ils existent
+            fond.getChildren().remove(17);
+            fond.getChildren().remove(16);
+        }
+        partieR = b;
+        j1 = new Joueur(grille, score, hScore);
+        j2 = new Joueur(j1.grilleModele, grille2, score2, hScore2);
+        System.out.println(j1.grilleModele);
+        System.out.println("Clic de souris sur le bouton menu");
+        partieT = false; //met la booléenne partie terminée à faux
+        dureePartie = System.currentTimeMillis();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("le contrôleur initialise la vue");
-        grille.getStyleClass().add("gridpane");
-        grille2.getStyleClass().add("gridpane");
-        fond.getStyleClass().add("fond");
+        fond.getStyleClass().add("pane");
         //GridPane.setHalignment(c, HPos.CENTER);
         //GridPane.setHalignment(c2, HPos.CENTER);
     }
 
-    /*
-     * Méthodes listeners pour gérer les événements (portent les mêmes noms que
-     * dans Scene Builder
-     */
+    //Méthodes listeners pour gérer les événements (portent les mêmes noms dans le document .fxml)
     @FXML
-    private void handleDragAction(MouseEvent event) {
-        System.out.println("Glisser/déposer sur la grille avec la souris");
-        double x = event.getX();//translation en abscisse
-        double y = event.getY();//translation en ordonnée
-        if (x > y) {
-            for (int i = 0; i < grille.getChildren().size(); i++) { //pour chaque colonne
-                //for (int j = 0; j < grille.getRowConstraints().size(); j++) { //pour chaque ligne
-                System.out.println("ok1");
-                grille.getChildren().remove(i);
+    private void nouvellePartieChoix() { //ouvre une nouvelle fenètre pour régler les paramètres de la nouvelle partie
+        Button btnNvPartie = new Button("Nouvelle Partie");
+        CheckBox checkBoxRMode = new CheckBox("Mode Rapide");
+        checkBoxRMode.setTooltip(new Tooltip("Pénalité de 5 secondes pendant lesquelles un joueur ne peut plus déplacer de cases s’il n’a effectué aucun déplacement pendant "
+                + "10 secondes"));
 
-                /*Node tuile = grille.getChildren().get(i);
-                 if (tuile != null) {
-                 int rowIndex = GridPane.getRowIndex(tuile);
-                 int rowEnd = GridPane.getRowIndex(tuile);
-                 }*/
-                // }
+        Pane fondNouvellePartie = new Pane();
+        fondNouvellePartie.getChildren().add(checkBoxRMode);
+        fondNouvellePartie.getChildren().add(btnNvPartie);
+        fondNouvellePartie.setStyle("-fx-background-color: #fefaf1");
+
+        Stage fenetreNouvellePartie = new Stage();
+        fenetreNouvellePartie.initModality(Modality.WINDOW_MODAL); //bloque la fenètre parent de la nouvelle fenètre
+        fenetreNouvellePartie.initOwner(fond.getScene().getWindow()); //désigne la fenètre principale comme la fenètre parent
+        fenetreNouvellePartie.setTitle("Nouvelle Partie");
+        Scene sceneNouvellePartie = new Scene(fondNouvellePartie, 250, 100);
+        sceneNouvellePartie.getStylesheets().add("css/styles.css");
+        fenetreNouvellePartie.setScene(sceneNouvellePartie);
+        fenetreNouvellePartie.show();
+
+        btnNvPartie.setOnAction(new EventHandler<ActionEvent>() { //Au clic sur le bouton "Nouvelle Partie" :
+            @Override
+            public void handle(ActionEvent event) {
+                nouvellePartie(checkBoxRMode.isSelected()); //crée une nouvelle partie et passe en paramètre la valeur de la checkBox pour le mode rapide
+                fenetreNouvellePartie.close(); //ferme la nouvelle fenètre
             }
-        } else if (x < y) {
-            System.out.println("ok2");
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    Pane p = new Pane();
-                    p.getStyleClass().add("pane");
-                    grille.add(p, i, j);
-                    p.setVisible(true);
-                    grille.getStyleClass().add("gridpane");
-                }
-            }
-        }
+        });
+
+        checkBoxRMode.setLayoutY(sceneNouvellePartie.getHeight() / 3); //positionne le bouton et la checkBox dans la nouvelle fenètre
+        checkBoxRMode.setLayoutX((sceneNouvellePartie.getWidth() / 2) - checkBoxRMode.getWidth() / 2);
+        btnNvPartie.setLayoutY((sceneNouvellePartie.getHeight() / 3) * 2);
+        btnNvPartie.setLayoutX((sceneNouvellePartie.getWidth() / 2) - btnNvPartie.getWidth() / 2);
     }
 
     @FXML
-    private void handleButtonAction(MouseEvent event) {
-        if (fond.getChildren().size() > 5) {
-            fond.getChildren().remove(6);
-            fond.getChildren().remove(5);
-        }
-        grilleModele = new Grille(); //remise à zéro des grilles (modele)
-        //https://stackoverflow.com/questions/11147788/clean-gridpane-in-javafx-and-maintain-the-grid-line
-        Node n = grille.getChildren().get(0);
-        grille.getChildren().clear(); //remise à zéro des grilles (affichage)
-        grille.getChildren().add(0, n);
-        n = grille2.getChildren().get(0);
-        grille2.getChildren().clear();
-        grille2.getChildren().add(0, n);
-        System.out.println("Clic de souris sur le bouton menu");
-        Case c = grilleModele.nouvelleCase2584GUI(); //crée une nouvelle case dans la grille du joueur 1 (modèle)
-        this.creerCase(c, true); //place la case dans la grille du joueur 1 (affichage)
-        c = grilleModele.nouvelleCase2584GUI(); //crée une deuxième case dans la grille du joueur 1 (modèle)
-        this.creerCase(c, true); //place la 2ème case dans la grille du joueur 1 (affichage)
-        grilleModele2 = new Grille(grilleModele); //copie la grille 1 (modele) et son contenu dans la grille 2 (modele)
-        for (Case c2 : grilleModele2.getGrille()) { //crée la grille du joueur 2 (affichage)
-            this.creerCase(c2, false);
-        }
-        partieT = false;
-        System.out.println(grilleModele);
-    }
-
-    @FXML
-    public void keyPressed(KeyEvent ke) { //pourrait ajouter eventListener touches après initialize ???
+    private void keyPressed(KeyEvent ke) {
         System.out.println("touche appuyée");
         if (!partieT) {
-            if (!grilleModele.partieFinie2584() && !grilleModele2.partieFinie2584()) {
+            if (!j1.grilleModele.partieFinie2584() && !j2.grilleModele.partieFinie2584()) {
                 String touche = ke.getText().toLowerCase();
-                boolean b = true;
+                Boolean b = null;
                 int direction = 0;
-                if (touche.compareTo("q") == 0) { // utilisateur appuie sur "q" pour envoyer la tuile vers la gauche
-                    direction = GAUCHE;
-                    b = true;
-                } else if (touche.compareTo("d") == 0) { // utilisateur appuie sur "d" pour envoyer la tuile vers la droite
-                    direction = DROITE;
-                    b = true;
-                } else if (touche.compareTo("z") == 0) {
-                    direction = HAUT;
-                    b = true;
-                } else if (touche.compareTo("s") == 0) {
-                    direction = BAS;
-                    b = true;
-                } else if (touche.compareTo("k") == 0) {
-                    direction = GAUCHE;
-                    b = false;
-                } else if (touche.compareTo("m") == 0) {
-                    direction = DROITE;
-                    b = false;
-                } else if (touche.compareTo("o") == 0) {
-                    direction = HAUT;
-                    b = false;
-                } else if (touche.compareTo("l") == 0) {
-                    direction = BAS;
-                    b = false;
+                switch (touche) {
+                    case "q":
+                        direction = GAUCHE;
+                        b = true;
+                        break;
+                    case "d":
+                        direction = DROITE;
+                        b = true;
+                        break;
+                    case "z":
+                        direction = HAUT;
+                        b = true;
+                        break;
+                    case "s":
+                        direction = BAS;
+                        b = true;
+                        break;
+                    case "k":
+                        direction = GAUCHE;
+                        b = false;
+                        break;
+                    case "m":
+                        direction = DROITE;
+                        b = false;
+                        break;
+                    case "o":
+                        direction = HAUT;
+                        b = false;
+                        break;
+                    case "l":
+                        direction = BAS;
+                        b = false;
+                        break;
                 }
 
-                Boolean b2 = null;
-                if (b) { //joueur 1 (grille gauche)
-                    b2 = grilleModele.lanceurDeplacerCases2584(direction);
-                    score.setText(String.valueOf(grilleModele.getScore()));
-                    Node n = grille.getChildren().get(0);
-                    grille.getChildren().clear();
-                    grille.getChildren().add(0, n);
-                    for (Case c : grilleModele.getGrille()) {
-                        this.creerCase(c, true);
-                    }
-                    if (b2) {
-                        Case c = grilleModele.nouvelleCase2584GUI();
-                        System.out.println(grilleModele);
-                        this.creerCase(c, true);
-                    }
-                } else {
-                    b2 = grilleModele2.lanceurDeplacerCases2584(direction);
-                    score2.setText(String.valueOf(grilleModele2.getScore()));
-                    Node n = grille2.getChildren().get(0);
-                    grille2.getChildren().clear();
-                    grille2.getChildren().add(0, n);
-                    for (Case c : grilleModele2.getGrille()) {
-                        this.creerCase(c, false);
-                    }
-                    if (b2) {
-                        Case c = grilleModele2.nouvelleCase2584GUI();
-                        System.out.println(grilleModele2);
-                        this.creerCase(c, false);
+                if (b != null) {
+                    if (b) { //joueur 1 (grilleAffichage gauche)
+                        j1.jouer(direction, partieR);
+                    } else { //joueur 2 (grilleAffichage droite)
+                        j2.jouer(direction, partieR);
                     }
                 }
-                if (grilleModele.getValeurMax() >= OBJECTIF2584) {
-                    affichageGameOver(grilleModele.victory2584(), 1);
-                    affichageGameOver("Perdu :)", 18.37);
-                    partieT = true;
-                } else if (grilleModele2.getValeurMax() >= OBJECTIF2584) {
-                    affichageGameOver("Perdu :)", 1);
-                    affichageGameOver(grilleModele2.victory2584(), 18.37);
-                    partieT = true;
+                if (j1.grilleModele.getValeurMax() >= OBJECTIF2584) {
+                    finPartie(true);
+                } else if (j2.grilleModele.getValeurMax() >= OBJECTIF2584) {
+                    finPartie(false);
                 }
             } else {
-                affichageGameOver(grilleModele.gameOver2584(), 1);
-                affichageGameOver(grilleModele2.gameOver2584(), 18.37);
-                partieT = true;
+                if (j1.grilleModele.partieFinie2584()) {
+                    finPartie(false);
+                } else {
+                    finPartie(true);
+                }
             }
         }
+    }
+
+    @FXML
+    private void fermer() {
+        System.exit(0);
+    }
+
+    @FXML
+    private void resultats() { //récupère les données de la BDD et les affiche dans une table, dans une nouvelle fenêtre
+        ConnexionBDD c = new ConnexionBDD(); //http://tutorials.jenkov.com/javafx/tableview.html#using-maps-as-data-items
+        ObservableList<Map<Integer, String>> oLResultats
+                = c.getTuples("SELECT scoreJoueur2, tuileMaxJoueur1, tuileMaxJoueur2, nombreDeplacementJoueur1, nombreDeplacementJoueur2, dureePartie FROM resultats LIMIT 10;");
+        //récupération des données
+        Button btnFermerResultats = new Button("Fermer"); //création du bouton pour fermer la fenêtre
+        TableView tableViewResultats = new TableView(); //création de la table
+
+        TableColumn<Map, String> tableColumnScoreJ1 = new TableColumn<>("Score J1"); //création de la colonne Score J1
+        tableColumnScoreJ1.setCellValueFactory(new MapValueFactory<>(0)); //attribue les valeurs avec l'id 0 à cette colonne 
+        tableViewResultats.getColumns().add(tableColumnScoreJ1); //ajoute la colonne à la table
+
+        TableColumn<Map, String> tableColumnScoreJ2 = new TableColumn<>("Score J2"); //création de la colonne Score J2
+        tableColumnScoreJ2.setCellValueFactory(new MapValueFactory<>(1));
+        tableViewResultats.getColumns().add(tableColumnScoreJ2);
+
+        TableColumn<Map, String> tableColumnTuileMaxJ1 = new TableColumn<>("Tuile Max J1"); //création de la colonne Tuile Max J1
+        tableColumnTuileMaxJ1.setCellValueFactory(new MapValueFactory<>(2));
+        tableViewResultats.getColumns().add(tableColumnTuileMaxJ1);
+
+        TableColumn<Map, String> tableColumnTuileMaxJ2 = new TableColumn<>("Tuile Max J2");//création de la colonne Tuile Max J2
+        tableColumnTuileMaxJ2.setCellValueFactory(new MapValueFactory<>(3));
+        tableViewResultats.getColumns().add(tableColumnTuileMaxJ2);
+
+        TableColumn<Map, String> tableColumnNbDéplacementsJ1 = new TableColumn<>("Déplacements J1"); //création de la colonne Déplacements J1
+        tableColumnNbDéplacementsJ1.setCellValueFactory(new MapValueFactory<>(4));
+        tableViewResultats.getColumns().add(tableColumnNbDéplacementsJ1);
+
+        TableColumn<Map, String> tableColumnNbDéplacementsJ2 = new TableColumn<>("Déplacements J2"); //création de la colonne Déplacements J2
+        tableColumnNbDéplacementsJ2.setCellValueFactory(new MapValueFactory<>(5));
+        tableViewResultats.getColumns().add(tableColumnNbDéplacementsJ2);
+
+        TableColumn<Map, String> tableColumnDuréePartie = new TableColumn<>("Durée Partie"); //création de la colonne Durée Partie
+        tableColumnDuréePartie.setCellValueFactory(new MapValueFactory<>(6));
+        tableViewResultats.getColumns().add(tableColumnDuréePartie);
+
+        tableViewResultats.getItems().addAll(oLResultats); //ajoute la liste de résultats récupérés à la table
+
+        Pane fondResultats = new Pane(); //crée le fond de la nouvelle fenètre
+        fondResultats.getChildren().add(tableViewResultats); //ajoute la table au fond
+        fondResultats.getChildren().add(btnFermerResultats); //ajoute le bouton au fond
+        fondResultats.setStyle("-fx-background-color: #fefaf1");
+
+        tableViewResultats.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        Stage fenetreResultats = new Stage(); //crée une nouveau fenêtre
+        fenetreResultats.initModality(Modality.WINDOW_MODAL); //bloque la fenètre parent de la nouvelle fenètre
+        fenetreResultats.initOwner(fond.getScene().getWindow()); //désigne la fenètre principale comme la fenètre parent
+        fenetreResultats.setTitle("Resultats"); //change le titre de la fenêtre
+        Scene sceneResultats = new Scene(fondResultats);
+        sceneResultats.getStylesheets().add("css/styles.css");
+        fenetreResultats.setScene(sceneResultats);
+        fenetreResultats.show();
+
+        btnFermerResultats.setOnAction(new EventHandler<ActionEvent>() { //Au clic sur le bouton "Fermer" :
+            @Override
+            public void handle(ActionEvent event) {
+                fenetreResultats.close(); //ferme la nouvelle fenètre
+            }
+        });
+        double x = sceneResultats.getHeight() - btnFermerResultats.getHeight();
+        tableViewResultats.setPrefHeight(x); //change la taille de la table
+        btnFermerResultats.setLayoutY(x); //positionne le bouton en bas de la nouvelle fenètre
+        btnFermerResultats.setLayoutX((sceneResultats.getWidth() / 2) - btnFermerResultats.getWidth() / 2); //positionne le bouton au centre de la nouvelle fenêtre
     }
 }

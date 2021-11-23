@@ -7,22 +7,35 @@
     -fx-background-radius: 5px;
 }
 
-.fond {
+AnchorPane {
     -fx-background-color: #fefaf1;
 }
 
-.gridpane {
+GridPane {
     -fx-grid-lines-visible: true;
     -fx-background-radius: 5px;
-    -fx-background-color: #b9aba0;
+    /*    -fx-background-color: #bbada0; */
+}
+
+Line {
+    -fx-stroke: transparent;
+    /*-fx-stroke-width: 10;*/
 }
 
 .tuile {
-    -fx-font-size: 32;
+    -fx-font-size: 40;
 }
 
-Label {
+Label, Button, CheckBox, .menu-item .label, .menu .label {
     -fx-text-fill: #776E65;
     -fx-font-family: 'Clear Sans';
-    -fx-font-size: 25;
+    -fx-font-size: 15;
+}
+
+TableView {
+    -fx-focus-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 10;
 }
