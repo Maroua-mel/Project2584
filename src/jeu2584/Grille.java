@@ -1,5 +1,6 @@
 package jeu2584;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -10,7 +11,7 @@ import static jeu2584.Parametres.GAUCHE;
 import static jeu2584.Parametres.HAUT;
 import static jeu2584.Parametres.TAILLE;
 
-public class Grille implements Parametres {
+public class Grille implements Parametres, Serializable {
 
     private HashSet<Case> grille;
     private int valeurMax = 0, score = 0;
@@ -244,39 +245,6 @@ public class Grille implements Parametres {
             return true;
         } else {
             return false;
-        }
-    }
-
-    // à condition qu’il reste des emplacements vides dans la grille, renvoie une case à positionner aléatoirement (là où il n’y a pas déjà une case) une case avec une 
-    //valeur aléatoire qui peut être soit 1, soit 2. La méthode nouvelleCase2584GUI retourne une case, selon si elle a réussi à ajouter une case ou pas
-    public Case nouvelleCase2584GUI() {
-        if (this.grille.size() < TAILLE * TAILLE) {
-            ArrayList<Case> casesLibres = new ArrayList<>();
-            Random ra = new Random();
-            int valeur = 1;
-            double ra1 = Math.random();
-            if (ra1 > 0.75) {
-                valeur = 2;
-            }
-            // on crée toutes les cases encore libres
-            for (int x = 0; x < TAILLE; x++) {
-                for (int y = 0; y < TAILLE; y++) {
-                    Case c = new Case(x, y, valeur);
-                    if (!this.grille.contains(c)) { // contains utilise la méthode equals dans Case
-                        casesLibres.add(c);
-                    }
-                }
-            }
-            // on en choisit une au hasard et on l'ajoute à la grille
-            Case ajout = casesLibres.get(ra.nextInt(casesLibres.size()));
-            ajout.setGrille(this);
-            this.grille.add(ajout);
-            if ((this.grille.size() == 1) || (this.valeurMax == 2 && ajout.getValeur() == 3)) { // Mise à jour de la valeur maximale présente dans la grille 
-                this.valeurMax = ajout.getValeur(); //si c'est la première case ajoutée ou si on ajoute un 3 et que l'ancien max était 2
-            }
-            return ajout;
-        } else {
-            return null;
         }
     }
 }
