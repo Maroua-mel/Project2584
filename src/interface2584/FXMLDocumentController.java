@@ -91,7 +91,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         //score, tuile maximum atteinte, nombre de déplacements effectués de chaque joueur et durée de la partie
         ConnexionBDD c = new ConnexionBDD();
         String query = j1.grilleModele.getScore() + ", " + j2.grilleModele.getScore() + ", " + j1.grilleModele.getValeurMax() + ", " + j2.grilleModele.getValeurMax()
-                + ", " + j1.getNbMouvements() + ", " + j2.getNbMouvements() + ", " + (System.currentTimeMillis() - dureePartie);
+                + ", " + j1.getNbMouvements() + ", " + j2.getNbMouvements() + ", " + Math.round((System.currentTimeMillis() - dureePartie) / 60000);
         c.insertTuples(query);
     }
 
@@ -112,7 +112,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
 
     private void changementStyle(int n) {
         if (n == listeStyle.size()) {
-            
+
         } else {
             fond.getScene().getStylesheets().clear();
             fond.getScene().getStylesheets().add(listeStyle.get(n));
@@ -331,7 +331,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
     private void resultats() { //récupère les données de la BDD et les affiche dans une table, dans une nouvelle fenêtre
         ConnexionBDD c = new ConnexionBDD(); //http://tutorials.jenkov.com/javafx/tableview.html#using-maps-as-data-items
         ObservableList<Map<Integer, String>> oLResultats
-                = c.getTuples("SELECT scoreJoueur2, tuileMaxJoueur1, tuileMaxJoueur2, nombreDeplacementJoueur1, nombreDeplacementJoueur2, dureePartie FROM resultats LIMIT 10;");
+                = c.getTuples("SELECT scoreJoueur1, scoreJoueur2, tuileMaxJoueur1, tuileMaxJoueur2, nombreDeplacementJoueur1, nombreDeplacementJoueur2, dureePartie FROM resultats LIMIT 10;");
         //récupération des données
         Button btnFermerResultats = new Button("Fermer"); //création du bouton pour fermer la fenêtre
         TableView tableViewResultats = new TableView(); //création de la table
