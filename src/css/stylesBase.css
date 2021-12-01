@@ -1,0 +1,29 @@
+@font-face {
+    font-family: 'Clear Sans';
+    src: url("ClearSans-Bold.ttf");
+}
+
+.pane {
+    -fx-background-radius: 5px;
+}
+GridPane {
+    -fx-grid-lines-visible: true;
+    -fx-background-radius: 5px;
+}
+
+Line {
+    -fx-stroke: transparent;
+}
+
+.label, Button, CheckBox {
+    -fx-font-family: 'Clear Sans';
+    -fx-font-size: 15;
+}
+
+.tuile {
+    -fx-font-size: 40;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 10;
+}
