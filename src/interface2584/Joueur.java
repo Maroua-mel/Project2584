@@ -1,5 +1,9 @@
 package interface2584;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,7 +23,7 @@ import outils.Parser;
 public class Joueur implements Serializable {
 
     public Grille grilleModele, grillePrec;
-    private int hScore = 0, nbMouvements = 0;
+    public int nbAnnuls = 5, hScore = 0, nbMouvements = 0, style;
     public Label labelScore, labelHScore;
     public GridPane grilleAffichage;
     public Button buttonAnnuler;
@@ -27,24 +31,35 @@ public class Joueur implements Serializable {
     private ArrayList<Tuile> listeTuileJ = new ArrayList<>();
     private ParallelTransition parallelTransition = new ParallelTransition();
 
-    public Joueur(GridPane g, Label s, Label hS) { //permet de construire un joueur avec une nouvelle grille
+    public Joueur(GridPane g, Label s, Label hS, Button b, int c) { //permet de construire un joueur avec une nouvelle grille
         this.grilleModele = new Grille();
-        grilleModele.nouvelleCase2584GUI(); //crée une nouvelle case dans la grilleAffichage du joueur 1 (modèle)
-        grilleModele.nouvelleCase2584GUI(); //crée une deuxième case dans la grilleAffichage du joueur 1 (modèle)
-        communsJoueur(g, s, hS);
+        grilleModele.nouvelleCase2584(); //crée une nouvelle case dans la grilleAffichage du joueur 1 (modèle)
+        grilleModele.nouvelleCase2584(); //crée une deuxième case dans la grilleAffichage du joueur 1 (modèle)
+        communsJoueur(g, s, hS, b, c);
     }
 
-    public Joueur(Grille gM, GridPane g, Label s, Label hS) { //permet de construire un joueur avec une grille identique à celle d'un autre
+    public Joueur(Grille gM, GridPane g, Label s, Label hS, Button b, int c) { //permet de construire un joueur avec une grille identique à celle d'un autre
         this.grilleModele = new Grille(gM); //copie la grille
-        communsJoueur(g, s, hS);
+        communsJoueur(g, s, hS, b, c);
     }
 
-    private void communsJoueur(GridPane g, Label s, Label hS) { //rassemble les éléments communs aux 2 constructeurs possibles pour joueur
+    private void communsJoueur(GridPane g, Label s, Label hS, Button b, int c) { //rassemble les éléments communs aux 2 constructeurs possibles pour joueur
         this.grillePrec = new Grille();
         this.dernierEJ = System.currentTimeMillis();
         grilleAffichage = g;
+        style = c;
         labelScore = s;
         labelHScore = hS;
+        buttonAnnuler = b;
+        buttonAnnuler.setDisable(true);
+        buttonAnnuler.setOnMouseClicked(e -> {
+            grilleModele = new Grille(grillePrec); //écrase la grilleAffichage (modèle) actuelle avec la grilleAffichage (modèle) stockée
+            creerGrille(); //re-crée la grilleAffichage (affichage) à partir de la nouvelle grilleAffichage (modèle)
+            System.out.println(grilleModele);
+            nbAnnuls--;
+            buttonAnnuler.setDisable(true); //réactive le bouton pour annuler
+            labelScore.setText(String.valueOf(grilleModele.getScore())); //met à jour le labelScore (affiché) du joueur
+        });
         creerGrille();
         int n = Integer.parseInt(labelScore.getText()), h = Integer.parseInt(labelHScore.getText()); //met le meilleur score à jour si nécessaire
         if (n > h) {
@@ -52,6 +67,10 @@ public class Joueur implements Serializable {
             this.hScore = n;
         }
         labelScore.setText("0"); //remise à zéro du score affiché
+    }
+
+    public int getNbAnnuls() {
+        return this.nbAnnuls;
     }
 
     public long getDernierEJ() {
@@ -70,13 +89,24 @@ public class Joueur implements Serializable {
         this.dernierEJ = l;
     }
 
+    public void setNbAnnuls(int n) {
+        this.nbAnnuls = n;
+    }
+
     public void setHScore(int n) {
         this.hScore = n;
     }
 
+    public void setStyle(int b) {
+        this.style = b;
+        this.creerGrille();
+    }
+
     public void creerGrille() { //recrée une grille (affichage) à partir de la grille (modèle) passée en paramètre
         grilleAffichage.getChildren().clear(); //remise à zéro des grilles (affichage)
-        listeTuileJ.clear();
+        if (listeTuileJ != null) {
+            listeTuileJ.clear();
+        }
 
         for (Case c : grilleModele.getGrille()) {
             this.creerCase(c);
@@ -86,7 +116,7 @@ public class Joueur implements Serializable {
     private void creerCase(Case c) { //ajoute une case dans la grille (affichage) du joueur
         StackPane p = new StackPane();
         p.getStyleClass().add("pane");
-        p.setStyle("-fx-background-color: #" + c.detCouleur()); //fixe la couleur de la case grâce à detCouleur, qui renvoie un code HTML correspondant à la valeur de la case
+        p.setStyle("-fx-background-color: #" + c.detCouleur(this.style)); //detCouleur renvoie un code HTML correspondant à la valeur de la case
         Label l = new Label();
         l.getStyleClass().add("tuile");
         grilleAffichage.add(p, c.getX(), c.getY()); //ajoute la case (affichage) dans la grilleAffichage (affichage) aux coordonnées correspondantes de la case (modèle)
@@ -108,18 +138,28 @@ public class Joueur implements Serializable {
                 this.dernierEJ = (System.currentTimeMillis() + 5000); //on place sa dernière entrée dans le futur en lui ajoutant 5 secondes
                 System.out.println("Le joueur est PUNI car il est LENT");
             } else {
+                if (this.grillePrec != null && this.getNbAnnuls() > 0) { //si l'ensemble (grilleAffichage) précédent n'est pas vide
+                    this.buttonAnnuler.setDisable(false); //active le bouton pour buttonAnnuler
+                }
                 this.dernierEJ = (System.currentTimeMillis());
+                HashSet<Case> ensTemp = new HashSet<>(); //crée un ensemble de cases pour sauvegarder la grille avant de faire le déplacement
+                int scorePrec = grilleModele.getScore(); //sauvegarde du score avant le déplacement
+                grilleModele.copierGrille(ensTemp); //sauvegarde la grille pré-déplacement dans l'ensemble
 
                 boolean b2 = grilleModele.lanceurDeplacerCases2584(direction);
                 if (b2) { //si on déplace au moins une case
+                    if (this.nbAnnuls > 0) { //si nombre d'annulations du joueur est >0 stocke l'ensemble temporaire dans l'ensemble (=la grille) de grillePrec
+                        this.grillePrec.setGrille(ensTemp); // pour que le joueur puisse retourner en arrière si besoin
+                        this.grillePrec.setScore(scorePrec); //sauvegarde aussi le score
+                        buttonAnnuler.setDisable(false); //active le bouton pour annuler
+                    }
                     labelScore.setText(String.valueOf(grilleModele.getScore())); //met à jour le score
                     for (Tuile tL : listeTuileJ) { //pour chaque tuile (ensemble case (affichage) et case (modèle) contenue dans la liste du joueur
                         animate(tL.p, tL.xY[0], tL.xY[1], tL.c.getX(), tL.c.getY()); //génère et ajoute les animations à parallelTransition
                     }
                     parallelTransition.setOnFinished(e -> { //quand toutes les transitions sont finies
+                        grilleModele.nouvelleCase2584(); //ajoute une nouvelle case à la grilleAffichage
                         creerGrille();  //recrée une grilleAffichage (affichage) à partir de la grilleAffichage (modèle) passée en paramètre
-                        Case c = grilleModele.nouvelleCase2584GUI(); //ajoute une nouvelle case à la grilleAffichage
-                        this.creerCase(c);
                         System.out.println(grilleModele);
                     });
                     parallelTransition.play(); //joue les transitions

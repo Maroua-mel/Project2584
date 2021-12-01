@@ -1,6 +1,9 @@
 package interface2584;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
@@ -12,6 +15,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -24,6 +28,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jeu2584.Grille;
+import outils.Client;
 import outils.ConnexionBDD;
 import outils.Parser;
 
@@ -46,6 +51,8 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
     private long dureePartie;
     private Joueur j1, j2;
     private boolean partieT = true, partieR = false, partieM; //partieT : si la partie est terminée, pour bloquer les boutons/touches. partieR : si partie est en mode rapide
+    private int couleur = 0;
+    private ArrayList<String> listeStyle;
 
     private void affichageGameOver(String s, double n) { //place un pane et un label devant une grilleAffichage quand la partie est finie
         Pane p = new Pane();
@@ -77,6 +84,8 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
             affichageGameOver(j2.grilleModele.victory2584(), 18.37);
         }
         partieT = true;
+        j1.buttonAnnuler.setDisable(true); //désactive les boutons pour annuler
+        j2.buttonAnnuler.setDisable(true);
         sauvegarder.setDisable(true); //désactive le bouton pour sauvegarder
 
         //score, tuile maximum atteinte, nombre de déplacements effectués de chaque joueur et durée de la partie
@@ -87,14 +96,98 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
     }
 
     private void nouvellePartie(boolean b) {
-        if (fond.getChildren().size() > 16) { //supprime les panes semi-transparents de fin de partie, si ils existent
-            fond.getChildren().remove(17);
-            fond.getChildren().remove(16);
+        if (fond.getChildren().size() > 13) { //supprime les panes semi-transparents de fin de partie, si ils existent
+            fond.getChildren().remove(14);
+            fond.getChildren().remove(13);
         }
         partieR = b;
-        j1 = new Joueur(grille, score, hScore);
-        j2 = new Joueur(j1.grilleModele, grille2, score2, hScore2);
+        j1 = new Joueur(grille, score, hScore, annuler, couleur);
+        j2 = new Joueur(j1.grilleModele, grille2, score2, hScore2, annuler2, couleur);
+        //Serveur.envoiGrilleServeur(j1.grilleModele);
         System.out.println(j1.grilleModele);
+        System.out.println("Clic de souris sur le bouton menu");
+        partieT = false; //met la booléenne partie terminée à faux
+        dureePartie = System.currentTimeMillis();
+    }
+
+    private void changementStyle(int n) {
+        if (n == listeStyle.size()) {
+            
+        } else {
+            fond.getScene().getStylesheets().clear();
+            fond.getScene().getStylesheets().add(listeStyle.get(n));
+            couleur = n;
+            if (!partieT) { //si une partie est en cours on ajuste la couleur des tuiles
+                j1.setStyle(n);
+                j2.setStyle(n);
+            }
+        }
+    }
+
+    private void nouveauStyle() {
+        Button btnFermerNVStyle = new Button("Fermer");
+
+        Pane fondNouveauStyle = new Pane();
+        fondNouveauStyle.getChildren().add(btnFermerNVStyle);
+        fondNouveauStyle.getStyleClass().add("fd");
+
+        Stage fenetreNouveauStyle = new Stage();
+        fenetreNouveauStyle.initModality(Modality.WINDOW_MODAL); //bloque la fenètre parent de la nouvelle fenètre
+        fenetreNouveauStyle.initOwner(fond.getScene().getWindow()); //désigne la fenètre principale comme la fenètre parent
+        fenetreNouveauStyle.setTitle("Modifier l'interface");
+        Scene sceneNouveauStyle = new Scene(fondNouveauStyle, 250, 100);
+        sceneNouveauStyle.getStylesheets().add(fond.getScene().getStylesheets().get(0));
+        fenetreNouveauStyle.setScene(sceneNouveauStyle);
+        fenetreNouveauStyle.show();
+    }
+
+    @FXML
+    private void modifierInterface() {
+        Button btnFermerStyle = new Button("Fermer");
+        ChoiceBox choiceBoxStyle = new ChoiceBox();
+        choiceBoxStyle.getItems().addAll("Défaut", "Style 1", "Style 2", "Ajouter un nouveau style");
+        choiceBoxStyle.setValue(choiceBoxStyle.getItems().get(couleur));
+        choiceBoxStyle.setOnAction((e) -> {
+            changementStyle(choiceBoxStyle.getSelectionModel().getSelectedIndex());
+        });
+
+        Pane fondModifierInterface = new Pane();
+        fondModifierInterface.getChildren().add(btnFermerStyle);
+        fondModifierInterface.getChildren().add(choiceBoxStyle);
+        fondModifierInterface.getStyleClass().add("fd");
+
+        Stage fenetreModifierInterface = new Stage();
+        fenetreModifierInterface.initModality(Modality.WINDOW_MODAL); //bloque la fenètre parent de la nouvelle fenètre
+        fenetreModifierInterface.initOwner(fond.getScene().getWindow()); //désigne la fenètre principale comme la fenètre parent
+        fenetreModifierInterface.setTitle("Modifier l'interface");
+        Scene sceneModifierInterface = new Scene(fondModifierInterface, 250, 100);
+        sceneModifierInterface.getStylesheets().add(fond.getScene().getStylesheets().get(0));
+        fenetreModifierInterface.setScene(sceneModifierInterface);
+        fenetreModifierInterface.show();
+
+        btnFermerStyle.setOnAction(new EventHandler<ActionEvent>() { //Au clic sur le bouton "Fermer" :
+            @Override
+            public void handle(ActionEvent event) {
+                fenetreModifierInterface.close(); //ferme la nouvelle fenètre
+            }
+        });
+
+        choiceBoxStyle.setOnAction((e) -> {
+            changementStyle(choiceBoxStyle.getSelectionModel().getSelectedIndex());
+            fenetreModifierInterface.getScene().getStylesheets().clear();
+            fenetreModifierInterface.getScene().getStylesheets().add(listeStyle.get(choiceBoxStyle.getSelectionModel().getSelectedIndex()));
+        });
+        double x = sceneModifierInterface.getHeight() - btnFermerStyle.getHeight();
+        choiceBoxStyle.setPrefHeight(x); //change la taille de la table
+        btnFermerStyle.setLayoutY(x); //positionne le bouton en bas de la nouvelle fenètre
+        btnFermerStyle.setLayoutX((sceneModifierInterface.getWidth() / 2) - btnFermerStyle.getWidth() / 2); //positionne le bouton au centre de la nouvelle fenêtre
+    }
+
+    @FXML
+    private void nouvellePartieClient() {
+        Grille g = Client.recuperationGrilleClient();
+        j1 = new Joueur(g, grille, score, hScore, annuler, couleur);
+        j2 = new Joueur(j1.grilleModele, grille2, score2, hScore2, annuler2, couleur);
         System.out.println("Clic de souris sur le bouton menu");
         partieT = false; //met la booléenne partie terminée à faux
         dureePartie = System.currentTimeMillis();
@@ -104,6 +197,11 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("le contrôleur initialise la vue");
         fond.getStyleClass().add("pane");
+        listeStyle = new ArrayList<>();
+        listeStyle.add("css/stylesDefaut.css");
+        listeStyle.add("css/stylesAltF4.css");
+        listeStyle.add("css/stylesAlt.css");
+
         //GridPane.setHalignment(c, HPos.CENTER);
         //GridPane.setHalignment(c2, HPos.CENTER);
     }
@@ -119,14 +217,14 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         Pane fondNouvellePartie = new Pane();
         fondNouvellePartie.getChildren().add(checkBoxRMode);
         fondNouvellePartie.getChildren().add(btnNvPartie);
-        fondNouvellePartie.setStyle("-fx-background-color: #fefaf1");
+        fondNouvellePartie.getStyleClass().add("fd");
 
         Stage fenetreNouvellePartie = new Stage();
         fenetreNouvellePartie.initModality(Modality.WINDOW_MODAL); //bloque la fenètre parent de la nouvelle fenètre
         fenetreNouvellePartie.initOwner(fond.getScene().getWindow()); //désigne la fenètre principale comme la fenètre parent
         fenetreNouvellePartie.setTitle("Nouvelle Partie");
         Scene sceneNouvellePartie = new Scene(fondNouvellePartie, 250, 100);
-        sceneNouvellePartie.getStylesheets().add("css/styles.css");
+        sceneNouvellePartie.getStylesheets().add(fond.getScene().getStylesheets().get(0));
         fenetreNouvellePartie.setScene(sceneNouvellePartie);
         fenetreNouvellePartie.show();
 
@@ -216,7 +314,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
     }
 
     @FXML
-    private void enregistrer() {
+    private void enregistrer() throws FileNotFoundException, IOException {
         Parser p = new Parser("sauvegarde.2584");
         p.sauvegarderGrille(j1, false); //sauvegarde en effacant les données précédentes
         p.sauvegarderGrille(j2, true); //sauvegarde en conservant les données présentes dans le fichier
@@ -271,7 +369,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         Pane fondResultats = new Pane(); //crée le fond de la nouvelle fenètre
         fondResultats.getChildren().add(tableViewResultats); //ajoute la table au fond
         fondResultats.getChildren().add(btnFermerResultats); //ajoute le bouton au fond
-        fondResultats.setStyle("-fx-background-color: #fefaf1");
+        fondResultats.getStyleClass().add("fd");
 
         tableViewResultats.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         Stage fenetreResultats = new Stage(); //crée une nouveau fenêtre
@@ -279,7 +377,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         fenetreResultats.initOwner(fond.getScene().getWindow()); //désigne la fenètre principale comme la fenètre parent
         fenetreResultats.setTitle("Resultats"); //change le titre de la fenêtre
         Scene sceneResultats = new Scene(fondResultats);
-        sceneResultats.getStylesheets().add("css/styles.css");
+        sceneResultats.getStylesheets().add(fond.getScene().getStylesheets().get(0));
         fenetreResultats.setScene(sceneResultats);
         fenetreResultats.show();
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -11,12 +12,12 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefWidth="860.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interface2584.FXMLDocumentController">
+<AnchorPane prefWidth="860.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interface2584.FXMLDocumentController">
     <children>
         <Pane fx:id="fond" onKeyPressed="#keyPressed" prefHeight="613.0" prefWidth="860.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <Pane layoutX="25.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0" />
-                <GridPane hgap="10" layoutX="24.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #bbada0;" vgap="10">
+                <GridPane hgap="10" layoutX="24.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0" styleClass="fond" vgap="10">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -30,22 +31,22 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="2" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="3" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="1" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.rowIndex="2" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.rowIndex="1" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.rowIndex="3" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="2" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="3" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="1" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.rowIndex="2" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.rowIndex="1" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.rowIndex="3" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                     </children>
                 </GridPane>
                 <GridPane fx:id="grille" gridLinesVisible="true" layoutX="24.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0" style="-fx-hgap: 10; -fx-vgap: 10;">
@@ -63,19 +64,20 @@
                     </rowConstraints>
                 </GridPane>
                 <Button layoutX="376.0" layoutY="126.0" onMouseClicked="#nouvellePartieChoix" prefHeight="31.0" prefWidth="100.0" text="Jouer" />
-                <Pane layoutX="276.0" layoutY="29.0" prefHeight="79.0" prefWidth="100.0" style="-fx-background-color: #b9aba0;">
+                <Pane layoutX="276.0" layoutY="29.0" prefHeight="79.0" prefWidth="100.0" styleClass="scores">
                     <children>
                         <Label alignment="CENTER" layoutY="2" prefWidth="100" text="Score" />
                         <Label fx:id="score" alignment="CENTER" layoutY="40.0" prefWidth="100" text="0" />
                     </children>
                 </Pane>
-                <Pane layoutX="123.0" layoutY="29.0" prefHeight="79.0" prefWidth="100.0" style="-fx-background-color: #b9aba0;">
+                <Pane layoutX="123.0" layoutY="29.0" prefHeight="79.0" prefWidth="100.0" styleClass="scores">
                     <children>
                         <Label alignment="CENTER" layoutY="2" prefWidth="100" text="Meilleur Score" />
                         <Label fx:id="hScore" alignment="CENTER" layoutY="40.0" prefWidth="100" text="0" />
                     </children>
                 </Pane>
-                <GridPane hgap="10" layoutX="441.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #bbada0;" vgap="10">
+                <Button fx:id="annuler" disable="true" layoutX="226.0" layoutY="126.0" prefHeight="31.0" prefWidth="100.0" text="Annuler" />
+                <GridPane hgap="10" layoutX="441.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0" styleClass="fond" vgap="10">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -89,22 +91,22 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="2" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="3" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="1" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.rowIndex="2" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.rowIndex="1" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.rowIndex="3" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <Pane prefHeight="397.0" prefWidth="397.0" style="-fx-background-color: #cdc0b4;" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="2" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="3" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="1" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.rowIndex="2" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.rowIndex="1" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.rowIndex="3" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <Pane prefHeight="397.0" prefWidth="397.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                     </children>
                 </GridPane>
                 <GridPane fx:id="grille2" gridLinesVisible="true" hgap="10" layoutX="441.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0" vgap="10">
@@ -121,27 +123,35 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                 </GridPane>
-                <Pane layoutX="640.0" layoutY="29.0" prefHeight="80" prefWidth="100.0" style="-fx-background-color: #b9aba0;">
+                <Pane layoutX="640.0" layoutY="29.0" prefHeight="80" prefWidth="100.0" styleClass="scores">
                     <children>
                         <Label alignment="CENTER" layoutY="2" prefWidth="100" text="Score" />
                         <Label fx:id="score2" alignment="CENTER" layoutY="40.0" prefWidth="100" text="0" />
                     </children>
                 </Pane>
-                <Pane layoutX="476.0" layoutY="29.0" prefHeight="80" prefWidth="100.0" style="-fx-background-color: #b9aba0;">
+                <Pane layoutX="476.0" layoutY="29.0" prefHeight="80" prefWidth="100.0" styleClass="scores">
                     <children>
                         <Label alignment="CENTER" layoutY="2" prefWidth="100" text="Meilleur Score" />
                         <Label fx:id="hScore2" alignment="CENTER" layoutY="40.0" prefWidth="100" text="0" />
                     </children>
                 </Pane>
+                <Button fx:id="annuler2" disable="true" layoutX="640.0" layoutY="126.0" prefHeight="31.0" prefWidth="100.0" text="Annuler" />
                 <MenuBar layoutX="2.0" layoutY="2.0" prefHeight="25.0" prefWidth="860.0">
                     <menus>
                         <Menu text="Partie">
                             <items>
                                 <MenuItem onAction="#nouvellePartieChoix" text="Nouvelle Partie" />
+                                <MenuItem onAction="#charger" text="Charger" />
+                                <MenuItem fx:id="sauvegarder" disable="true" onAction="#enregistrer" text="Sauvegarder" />
                                 <MenuItem onAction="#resultats" text="Résultats" />
                                 <MenuItem onAction="#fermer" text="Quitter" />
                             </items>
                         </Menu>
+                  <Menu mnemonicParsing="false" text="Paramètres">
+                    <items>
+                      <MenuItem onAction="#modifierInterface" text="Interface" />
+                    </items>
+                  </Menu>
                     </menus>
                 </MenuBar>
             </children>
