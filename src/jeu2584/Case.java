@@ -1,5 +1,6 @@
 package jeu2584;
 
+import java.io.Serializable;
 import static jeu2584.Parametres.BAS;
 import static jeu2584.Parametres.DROITE;
 import static jeu2584.Parametres.GAUCHE;
@@ -7,7 +8,7 @@ import static jeu2584.Parametres.HAUT;
 import static jeu2584.Parametres.SUITE2;
 import static jeu2584.Parametres.TAILLE;
 
-public class Case implements Parametres {
+public class Case implements Parametres, Serializable {
 
     private int x, y, valeur;
     private Grille grille;
@@ -132,8 +133,120 @@ public class Case implements Parametres {
 
     //choisit de déterminer la couleur avec une fonction, dans le controlleur. Possibilité alternative de directement mettre un attribut couleur dans
     //la case
-    public String detCouleur() {
-        return "";
+    public String detCouleur(int b) {
+        switch (b) {
+            case 1:
+                switch (this.valeur) {
+                    case 2:
+                        return "d99ba1";
+                    case 3:
+                        return "d99ba1";
+                    case 5:
+                        return "d99ba1";
+                    case 8:
+                        return "d99ba1";
+                    case 13:
+                        return "d99ba1";
+                    case 21:
+                        return "d99ba1";
+                    case 34:
+                        return "d99ba1";
+                    case 55:
+                        return "d99ba1";
+                    case 89:
+                        return "d99ba1";
+                    case 144:
+                        return "d99ba1";
+                    case 233:
+                        return "d99ba1";
+                    case 377:
+                        return "d99ba1";
+                    case 610:
+                        return "d99ba1";
+                    case 987:
+                        return "d99ba1";
+                    case 1597:
+                        return "d99ba1";
+                    case 2584:
+                        return "d99ba1";
+                    default:
+                        return "d99ba1";
+                }
+            case 2:
+                switch (this.valeur) {
+                    case 2:
+                        return "ffd90f";
+                    case 3:
+                        return "ffd90f";
+                    case 5:
+                        return "ffd90f";
+                    case 8:
+                        return "ffd90f";
+                    case 13:
+                        return "ffd90f";
+                    case 21:
+                        return "ffd90f";
+                    case 34:
+                        return "ffd90f";
+                    case 55:
+                        return "ffd90f";
+                    case 89:
+                        return "ffd90f";
+                    case 144:
+                        return "ffd90f";
+                    case 233:
+                        return "ffd90f";
+                    case 377:
+                        return "ffd90f";
+                    case 610:
+                        return "ffd90f";
+                    case 987:
+                        return "ffd90f";
+                    case 1597:
+                        return "ffd90f";
+                    case 2584:
+                        return "ffd90f";
+                    default:
+                        return "ffd90f";
+                }
+            default:
+                switch (this.valeur) {
+                    case 2:
+                        return "ede0c8";
+                    case 3:
+                        return "f2b179";
+                    case 5:
+                        return "f59563";
+                    case 8:
+                        return "f67c60";
+                    case 13:
+                        return "f65e3b";
+                    case 21:
+                        return "edcf73";
+                    case 34:
+                        return "edcc62";
+                    case 55:
+                        return "edc850";
+                    case 89:
+                        return "edc53f";
+                    case 144:
+                        return "edc22d";
+                    case 233:
+                        return "e8ed2d";
+                    case 377:
+                        return "f0f373";
+                    case 610:
+                        return "f8f9b9";
+                    case 987:
+                        return "b9f8f9";
+                    case 1597:
+                        return "b9e8f9";
+                    case 2584:
+                        return "b9d8f9";
+                    default:
+                        return "eee4da";
+                }
+        }
     }
 
     @Override
