@@ -22,7 +22,7 @@ public class Main implements Parametres {
             while (!g1.partieFinie2584() && !g2.partieFinie2584()) {
                 for (int i = 0; i < 2; i++) {
                     System.out.println("Grille joueur " + (i + 1));
-                    String[] t = new String[4];
+                    String[] t;
                     if (i == 0) {
                         System.out.println(g1);
                         t = new String[]{"d", "g", "h", "b"};
@@ -57,7 +57,7 @@ public class Main implements Parametres {
                     } else {
                         b2 = g2.lanceurDeplacerCases2584(direction);
                     }
-                    if (b2) { //si au moins une case a été déplacée. Même si le joueur ne déplace pas une case pendant son tour, il le passe
+                    if (b2) { //si au moins une case a été déplacée. Si le joueur ne déplace pas une case pendant son tour, il le passe
                         if (i == 0) {
                             b = g1.nouvelleCase2584();
                         } else if (i != 0) {

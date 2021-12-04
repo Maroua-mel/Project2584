@@ -1,9 +1,6 @@
-package interface2584;
+package jeu2584;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import interface2584.Tuile;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,58 +13,17 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
-import jeu2584.Case;
-import jeu2584.Grille;
-import outils.Parser;
 
-public class Joueur implements Serializable {
+public abstract class Joueur implements Serializable {
 
-    public Grille grilleModele, grillePrec;
-    public int nbAnnuls = 5, hScore = 0, nbMouvements = 0, style;
-    public Label labelScore, labelHScore;
-    public GridPane grilleAffichage;
-    public Button buttonAnnuler;
-    private long dernierEJ;
-    private ArrayList<Tuile> listeTuileJ = new ArrayList<>();
-    private ParallelTransition parallelTransition = new ParallelTransition();
-
-    public Joueur(GridPane g, Label s, Label hS, Button b, int c) { //permet de construire un joueur avec une nouvelle grille
-        this.grilleModele = new Grille();
-        grilleModele.nouvelleCase2584(); //crée une nouvelle case dans la grilleAffichage du joueur 1 (modèle)
-        grilleModele.nouvelleCase2584(); //crée une deuxième case dans la grilleAffichage du joueur 1 (modèle)
-        communsJoueur(g, s, hS, b, c);
-    }
-
-    public Joueur(Grille gM, GridPane g, Label s, Label hS, Button b, int c) { //permet de construire un joueur avec une grille identique à celle d'un autre
-        this.grilleModele = new Grille(gM); //copie la grille
-        communsJoueur(g, s, hS, b, c);
-    }
-
-    private void communsJoueur(GridPane g, Label s, Label hS, Button b, int c) { //rassemble les éléments communs aux 2 constructeurs possibles pour joueur
-        this.grillePrec = new Grille();
-        this.dernierEJ = System.currentTimeMillis();
-        grilleAffichage = g;
-        style = c;
-        labelScore = s;
-        labelHScore = hS;
-        buttonAnnuler = b;
-        buttonAnnuler.setDisable(true);
-        buttonAnnuler.setOnMouseClicked(e -> {
-            grilleModele = new Grille(grillePrec); //écrase la grilleAffichage (modèle) actuelle avec la grilleAffichage (modèle) stockée
-            creerGrille(); //re-crée la grilleAffichage (affichage) à partir de la nouvelle grilleAffichage (modèle)
-            System.out.println(grilleModele);
-            nbAnnuls--;
-            buttonAnnuler.setDisable(true); //réactive le bouton pour annuler
-            labelScore.setText(String.valueOf(grilleModele.getScore())); //met à jour le labelScore (affiché) du joueur
-        });
-        creerGrille();
-        int n = Integer.parseInt(labelScore.getText()), h = Integer.parseInt(labelHScore.getText()); //met le meilleur score à jour si nécessaire
-        if (n > h) {
-            labelHScore.setText(labelScore.getText());
-            this.hScore = n;
-        }
-        labelScore.setText("0"); //remise à zéro du score affiché
-    }
+    protected Grille grilleModele, grillePrec;
+    protected int nbAnnuls = 5, hScore = 0, nbMouvements = 0, style;
+    public transient Label labelScore, labelHScore;
+    public transient GridPane grilleAffichage;
+    public transient Button buttonAnnuler;
+    protected long dernierEJ;
+    protected transient ArrayList<Tuile> listeTuileJ = new ArrayList<>();
+    protected transient ParallelTransition parallelTransition = new ParallelTransition();
 
     public int getNbAnnuls() {
         return this.nbAnnuls;
@@ -84,7 +40,15 @@ public class Joueur implements Serializable {
     public int getNbMouvements() {
         return this.nbMouvements;
     }
+    
+    public Grille getGrilleModele() {
+        return this.grilleModele;
+    }
 
+    public Grille getGrillePrec() {
+        return this.grillePrec;
+    }
+    
     public void setDernierEJ(long l) {
         this.dernierEJ = l;
     }
@@ -113,7 +77,7 @@ public class Joueur implements Serializable {
         }
     }
 
-    private void creerCase(Case c) { //ajoute une case dans la grille (affichage) du joueur
+    protected void creerCase(Case c) { //ajoute une case dans la grille (affichage) du joueur
         StackPane p = new StackPane();
         p.getStyleClass().add("pane");
         p.setStyle("-fx-background-color: #" + c.detCouleur(this.style)); //detCouleur renvoie un code HTML correspondant à la valeur de la case
@@ -170,7 +134,7 @@ public class Joueur implements Serializable {
         }
     }
 
-    private void animate(Node t, int xOrigine, int yOrigine, int xNV, int yNV) { //https://stackoverflow.com/questions/59269930/is-there-a-way-to-animate-elements-in-gridpane
+    protected void animate(Node t, int xOrigine, int yOrigine, int xNV, int yNV) { //https://stackoverflow.com/questions/59269930/is-there-a-way-to-animate-elements-in-gridpane
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.millis(100));
         translateTransition.setToX((xNV - xOrigine) * (grilleAffichage.getPrefHeight() / 4));
@@ -187,17 +151,21 @@ public class Joueur implements Serializable {
         parallelTransition.getChildren().add(translateTransition);
     }
 
-    public void chargerJoueur(int n) {
-        Parser p = new Parser("sauvegarde.2584");
-        int[] t = p.parseInfoJoueur(n);
-        this.hScore = t[1]; //affecte le meilleur score récupéré dans le fichier au joueur
+    public void chargerJoueur(Joueur j) {
+        this.grilleModele = j.grilleModele;
+        this.nbAnnuls = j.nbAnnuls;
+        if (j.grillePrec != null) { //si il existe une grille précédente, l'affecte
+            this.grillePrec = j.grillePrec;
+            if (this.nbAnnuls > 0) { //si le nombre d'annulations est supérieur à 5, active le bouton pour annuler
+                this.buttonAnnuler.setDisable(false);
+            }
+        }
+        this.hScore = j.hScore;
+        this.nbMouvements = j.nbMouvements;
         int h = Integer.parseInt(labelHScore.getText()); //met le label meilleur score à jour si nécessaire
         if (this.hScore > h) { //le mettre à jour quoi qu'il arrive plutôt ?
             labelHScore.setText(String.valueOf(this.hScore));
         }
-        this.grilleModele = p.parseGrille(n); //affecte la grille principale récupérée dans le fichier au joueur
-        this.labelScore.setText(String.valueOf(grilleModele.getScore())); //met à jour le label avec le score de la grille
-        this.grillePrec = p.parseGrille(6 + n); //affecte la grille précédente récupérée dans le fichier au joueur
-        this.creerGrille(); //affiche la grille
+        this.creerGrille();
     }
 }
