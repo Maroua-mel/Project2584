@@ -23,6 +23,7 @@ import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jeu2584.Grille;
@@ -139,9 +140,9 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
             changementStyle(choiceBoxStyle.getSelectionModel().getSelectedIndex());
         });
 
-        Pane fondModifierInterface = new Pane();
-        fondModifierInterface.getChildren().add(btnFermerStyle);
-        fondModifierInterface.getChildren().add(choiceBoxStyle);
+        VBox fondModifierInterface = new VBox(3);
+        fondModifierInterface.getChildren().addAll(choiceBoxStyle, btnFermerStyle);
+        fondModifierInterface.setAlignment(Pos.CENTER);
         fondModifierInterface.getStyleClass().add("fd");
 
         Stage fenetreModifierInterface = new Stage();
@@ -163,10 +164,6 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
             fenetreModifierInterface.getScene().getStylesheets().clear();
             fenetreModifierInterface.getScene().getStylesheets().add(listeStyle.get(choiceBoxStyle.getSelectionModel().getSelectedIndex()));
         });
-        double x = sceneModifierInterface.getHeight() - btnFermerStyle.getHeight();
-        choiceBoxStyle.setPrefHeight(x); //change la taille de la table
-        btnFermerStyle.setLayoutY(x); //positionne le bouton en bas de la nouvelle fenètre
-        btnFermerStyle.setLayoutX((sceneModifierInterface.getWidth() / 2) - btnFermerStyle.getWidth() / 2); //positionne le bouton au centre de la nouvelle fenêtre
     }
 
     @FXML
@@ -201,10 +198,9 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
                 + "10 secondes"));
         CheckBox checkBoxIA = new CheckBox("Jouer avec une IA");
 
-        Pane fondNouvellePartie = new Pane();
-        fondNouvellePartie.getChildren().add(checkBoxRMode);
-        fondNouvellePartie.getChildren().add(checkBoxIA);
-        fondNouvellePartie.getChildren().add(btnNvPartie);
+        VBox fondNouvellePartie = new VBox(7);
+        fondNouvellePartie.getChildren().addAll(checkBoxRMode, checkBoxIA, btnNvPartie);
+        fondNouvellePartie.setAlignment(Pos.CENTER);
         fondNouvellePartie.getStyleClass().add("fd");
 
         Stage fenetreNouvellePartie = new Stage();
@@ -220,13 +216,6 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
             nouvellePartie(checkBoxRMode.isSelected(), checkBoxIA.isSelected()); //crée une nouvelle partie et passe en paramètre la valeur de la checkBox pour le mode rapide
             fenetreNouvellePartie.close(); //ferme la nouvelle fenètre au clic sur le bouton "Nouvelle Partie" :
         });
-
-        double moitieLargeurScene = sceneNouvellePartie.getWidth() / 2;
-        checkBoxIA.setLayoutX((moitieLargeurScene) - checkBoxIA.getWidth() / 2);
-        checkBoxRMode.setLayoutY(sceneNouvellePartie.getHeight() / 3); //positionne le bouton et la checkBox dans la nouvelle fenètre
-        checkBoxRMode.setLayoutX((moitieLargeurScene) - checkBoxRMode.getWidth() / 2);
-        btnNvPartie.setLayoutY((sceneNouvellePartie.getHeight() / 3) * 2);
-        btnNvPartie.setLayoutX((moitieLargeurScene) - btnNvPartie.getWidth() / 2);
     }
 
     @FXML
@@ -320,8 +309,8 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
                 nouvellePartie(false, true);
             }
             j1.chargerJoueur(lJ.get(0));
-
             j2.chargerJoueur(lJ.get(1));
+            changementStyle(j1.getStyle());
         } else {
             System.out.println("Le fichier n'existe pas, démarrage d'une nouvelle partie.");
             nouvellePartie(false, false);
@@ -367,9 +356,9 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
 
         tableViewResultats.getItems().addAll(oLResultats); //ajoute la liste de résultats récupérés à la table
 
-        Pane fondResultats = new Pane(); //crée le fond de la nouvelle fenètre
-        fondResultats.getChildren().add(tableViewResultats); //ajoute la table au fond
-        fondResultats.getChildren().add(btnFermerResultats); //ajoute le bouton au fond
+        VBox fondResultats = new VBox(); //crée le fond de la nouvelle fenètre
+        fondResultats.getChildren().addAll(tableViewResultats, btnFermerResultats); //ajoute le bouton et la table au fond
+        fondResultats.setAlignment(Pos.CENTER);
         fondResultats.getStyleClass().add("fd");
 
         tableViewResultats.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -383,12 +372,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         fenetreResultats.show();
 
         btnFermerResultats.setOnAction((ActionEvent event) -> {
-            fenetreResultats.close(); //ferme la nouvelle fenètre
-        } //Au clic sur le bouton "Fermer" :
-        );
-        double x = sceneResultats.getHeight() - btnFermerResultats.getHeight();
-        tableViewResultats.setPrefHeight(x); //change la taille de la table
-        btnFermerResultats.setLayoutY(x); //positionne le bouton en bas de la nouvelle fenètre
-        btnFermerResultats.setLayoutX((sceneResultats.getWidth() / 2) - btnFermerResultats.getWidth() / 2); //positionne le bouton au centre de la nouvelle fenêtre
+            fenetreResultats.close(); //ferme la nouvelle fenètre au clic sur le bouton "Fermer"
+        });
     }
 }

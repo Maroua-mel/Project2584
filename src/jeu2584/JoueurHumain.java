@@ -1,7 +1,5 @@
 package jeu2584;
 
-import java.util.ArrayList;
-import javafx.animation.ParallelTransition;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -12,16 +10,14 @@ public class JoueurHumain extends Joueur {
         super.grilleModele = new Grille();
         super.grilleModele.nouvelleCase2584(); //crée une nouvelle case dans la grilleAffichage du joueur 1 (modèle)
         super.grilleModele.nouvelleCase2584(); //crée une deuxième case dans la grilleAffichage du joueur 1 (modèle)
-        super.parallelTransition = new ParallelTransition();
-        super.listeTuileJ = new ArrayList<>();
         communsJoueur(g, s, hS, b, c);
     }
-    
+
     public JoueurHumain(Grille gM, GridPane g, Label s, Label hS, Button b, int c) { //permet de construire un joueur avec une grille identique à celle d'un autre
         super.grilleModele = new Grille(gM); //copie la grille
         communsJoueur(g, s, hS, b, c);
     }
-    
+
     private void communsJoueur(GridPane g, Label s, Label hS, Button b, int c) { //rassemble les éléments communs aux 2 constructeurs possibles pour joueur
         super.grillePrec = new Grille();
         super.dernierEJ = System.currentTimeMillis();

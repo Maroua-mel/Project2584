@@ -37,10 +37,14 @@ public abstract class Joueur implements Serializable {
         return this.hScore;
     }
 
+    public int getStyle() {
+        return this.style;
+    }
+
     public int getNbMouvements() {
         return this.nbMouvements;
     }
-    
+
     public Grille getGrilleModele() {
         return this.grilleModele;
     }
@@ -48,7 +52,7 @@ public abstract class Joueur implements Serializable {
     public Grille getGrillePrec() {
         return this.grillePrec;
     }
-    
+
     public void setDernierEJ(long l) {
         this.dernierEJ = l;
     }
@@ -154,6 +158,7 @@ public abstract class Joueur implements Serializable {
     public void chargerJoueur(Joueur j) {
         this.grilleModele = j.grilleModele;
         this.nbAnnuls = j.nbAnnuls;
+        this.style = j.style;
         if (j.grillePrec != null) { //si il existe une grille précédente, l'affecte
             this.grillePrec = j.grillePrec;
             if (this.nbAnnuls > 0) { //si le nombre d'annulations est supérieur à 5, active le bouton pour annuler

@@ -16,7 +16,6 @@ public class Serveur {
             ServerSocket ecoute = new ServerSocket(port);
             while (!ecoute.isClosed()) {
                 Socket s = ecoute.accept();
-                System.out.println(s.getInetAddress());
                 //InputStream in = s.getInputStream();
                 OutputStream out = s.getOutputStream();
                 //ObjectInputStream objIn = new ObjectInputStream(in);
