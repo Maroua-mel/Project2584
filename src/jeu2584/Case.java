@@ -26,7 +26,8 @@ public class Case implements Parametres, Serializable {
         this.grille = g;
     }
 
-    /** Setter of Grille */
+    /** Setter of Grille
+     * @param g grid to set*/
     public void setGrille(Grille g) {
         this.grille = g;
     }
@@ -44,22 +45,26 @@ public class Case implements Parametres, Serializable {
         return this.y;
     }
 
-    /** Setter of the abscissa of the tile */
+    /** Setter of the abscissa of the tile
+     * @param x abscissa x to set*/
     public void setX(int x) {
         this.x = x;
     }
 
-    /** Setter of the ordinate of the tile */
+    /** Setter of the ordinate of the tile
+     * @param y ordinate y to set*/
     public void setY(int y) {
         this.y = y;
     }
 
-    /** Setter of the value of the tile */
+    /** Setter of the value of the tile
+     * @param valeur value to set*/
     public void setValeur(int valeur) {
         this.valeur = valeur;
     }
 
-    /** Getter of the value of the tile */
+    /** Getter of the value of the tile
+     * @return returns the value of the tile*/
     public int getValeur() {
         return this.valeur;
     }
@@ -87,20 +92,6 @@ public class Case implements Parametres, Serializable {
     @Override
     public int hashCode() {
         return this.x * 7 + this.y * 13;
-    }
-
-    /**
-     * Returns true if and only if the argument is not null and represents same value as this tile.
-     * @param c The tile that we want to compare with this instance
-     * @return returns true if this object represents the same tile value as the argument,
-     * false if this object doesn't represent the same value.
-     */
-    public boolean valeurEgale(Case c) {
-        if (c != null) {
-            return this.valeur == c.valeur;
-        } else {
-            return false;
-        }
     }
 
     /**
@@ -172,81 +163,81 @@ public class Case implements Parametres, Serializable {
      * @param b An int which represents one of the three styles of graphic interface possibilities
      * @return returns a string that represents a hex color code for each tile.
      */
-    public String detCouleur(int b) {
+    public String detCouleur(int b) { //couleurs générées sur colordesigner.io/gradient-generator
         switch (b) {
             case 1:
                 switch (this.valeur) {
                     case 2:
-                        return "d99ba1";
+                        return "e2bf11";
                     case 3:
-                        return "d99ba1";
+                        return "d2c621";
                     case 5:
-                        return "d99ba1";
+                        return "c1cd31";
                     case 8:
-                        return "d99ba1";
+                        return "b1d242";
                     case 13:
-                        return "d99ba1";
+                        return "a0d753";
                     case 21:
-                        return "d99ba1";
+                        return "8fdb65";
                     case 34:
-                        return "d99ba1";
+                        return "7ddf77";
                     case 55:
-                        return "d99ba1";
+                        return "6be288";
                     case 89:
-                        return "d99ba1";
+                        return "57e49a";
                     case 144:
-                        return "d99ba1";
+                        return "40e6ac";
                     case 233:
-                        return "d99ba1";
+                        return "23e8bc";
                     case 377:
-                        return "d99ba1";
+                        return "00e9cc";
                     case 610:
-                        return "d99ba1";
+                        return "00eadb";
                     case 987:
-                        return "d99ba1";
+                        return "00eae9";
                     case 1597:
-                        return "d99ba1";
+                        return "00eaf5";
                     case 2584:
-                        return "d99ba1";
+                        return "0eeaff";
                     default:
-                        return "d99ba1";
+                        return "f2b705";
                 }
             case 2:
                 switch (this.valeur) {
                     case 2:
-                        return "ffd90f";
+                        return "f63e44";
                     case 3:
-                        return "ffd90f";
+                        return "f73b52";
                     case 5:
-                        return "ffd90f";
+                        return "f7395e";
                     case 8:
-                        return "ffd90f";
+                        return "f53a6b";
                     case 13:
-                        return "ffd90f";
+                        return "f23c77";
                     case 21:
-                        return "ffd90f";
+                        return "ee4083";
                     case 34:
-                        return "ffd90f";
+                        return "e9448e";
                     case 55:
-                        return "ffd90f";
+                        return "e34a98";
                     case 89:
-                        return "ffd90f";
+                        return "dc50a2";
                     case 144:
-                        return "ffd90f";
+                        return "d456ab";
                     case 233:
-                        return "ffd90f";
+                        return "cb5bb3";
                     case 377:
-                        return "ffd90f";
+                        return "c161bb";
                     case 610:
-                        return "ffd90f";
+                        return "b767c1";
                     case 987:
-                        return "ffd90f";
+                        return "ac6cc6";
                     case 1597:
-                        return "ffd90f";
+                        return "a171ca";
                     case 2584:
-                        return "ffd90f";
+                        return "9575cd";
                     default:
-                        return "ffd90f";
+                        return "f44336";
                 }
             default:
                 switch (this.valeur) {

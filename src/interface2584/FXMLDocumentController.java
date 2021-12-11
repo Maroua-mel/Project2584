@@ -3,6 +3,7 @@ package interface2584;
 import jeu2584.Joueur;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
@@ -26,10 +27,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jeu2584.Grille;
 import jeu2584.JoueurHumain;
 import jeu2584.OrdiAleatoire;
-import outils.Client;
+import jeu2584.OrdiAleatoirePlus;
 import outils.ConnexionBDD;
 import outils.Parser;
 
@@ -51,10 +51,9 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
     // variables globales non définies dans la vue (fichier .fxml)
     private long dureePartie;
     private Joueur j1, j2;
-    private boolean partieT = true, partieR = false, partieM, ia; //partieT : si la partie est terminée, pour bloquer les boutons/touches. partieR : si partie est en mode rapide
+    private boolean partieT = true, partieR = false, ia; //partieT : si la partie est terminée, pour bloquer les boutons/touches. partieR : si partie est en mode rapide
     private int couleur = 0;
-    private ArrayList<String> listeStyle;
-    private Joueur[] tabJ;
+    private final ArrayList<String> listeStyle = new ArrayList<>(Arrays.asList("css/stylesDefaut.css", "css/stylesAltF4.css", "css/stylesAlt.css"));
 
     private void affichageGameOver(String s, double n) { //place un pane et un label devant une grilleAffichage quand la partie est finie
         Pane p = new Pane();
@@ -98,22 +97,26 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         t.start();
     }
 
-    private void nouvellePartie(boolean b, boolean bIa) {
-        if (fond.getChildren().size() > 14) { //supprime les panes semi-transparents de fin de partie, si ils existent
-            fond.getChildren().remove(15);
+    private void nouvellePartie(boolean b, int iIa) {
+        if (fond.getChildren().size() > 13) { //supprime les panes semi-transparents de fin de partie, si ils existent
             fond.getChildren().remove(14);
+            fond.getChildren().remove(13);
         }
         partieR = b;
-        ia = bIa;
         j1 = new JoueurHumain(grille, score, hScore, annuler, couleur);
         if (ia) {
-            j2 = new OrdiAleatoire(j1.getGrilleModele(), grille2, score2, hScore2, annuler2, couleur);
+            switch (iIa) {
+                case 0:
+                    j2 = new OrdiAleatoire(j1.getGrilleModele(), grille2, score2, hScore2, annuler2, couleur);
+                    break;
+                case 1:
+                    j2 = new OrdiAleatoirePlus(j1.getGrilleModele(), grille2, score2, hScore2, annuler2, couleur);
+                    break;
+            }
         } else {
             j2 = new JoueurHumain(j1.getGrilleModele(), grille2, score2, hScore2, annuler2, couleur);
         }
-        tabJ = new Joueur[]{j1, j2};
 
-        //Serveur.envoiGrilleServeur(j1.grilleModele);
         System.out.println(j1.getGrilleModele());
         System.out.println("Clic de souris sur le bouton menu");
         partieT = false; //met la booléenne partie terminée à faux
@@ -155,9 +158,8 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         fenetreModifierInterface.show();
 
         btnFermerStyle.setOnAction((ActionEvent event) -> {
-            fenetreModifierInterface.close(); //ferme la nouvelle fenètre
-        } //Au clic sur le bouton "Fermer" :
-        );
+            fenetreModifierInterface.close(); //ferme la nouvelle fenètre au clic sur le bouton "Fermer"
+        });
 
         choiceBoxStyle.setOnAction((e) -> {
             changementStyle(choiceBoxStyle.getSelectionModel().getSelectedIndex());
@@ -166,27 +168,10 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         });
     }
 
-    @FXML
-    private void nouvellePartieClient() {
-        Grille g = Client.recuperationGrilleClient();
-        j1 = new JoueurHumain(g, grille, score, hScore, annuler, couleur);
-        j2 = new JoueurHumain(j1.getGrilleModele(), grille2, score2, hScore2, annuler2, couleur);
-        System.out.println("Clic de souris sur le bouton menu");
-        partieT = false; //met la booléenne partie terminée à faux
-        dureePartie = System.currentTimeMillis();
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("le contrôleur initialise la vue");
         fond.getStyleClass().add("pane");
-        listeStyle = new ArrayList<>();
-        listeStyle.add("css/stylesDefaut.css");
-        listeStyle.add("css/stylesAltF4.css");
-        listeStyle.add("css/stylesAlt.css");
-
-        //GridPane.setHalignment(c, HPos.CENTER);
-        //GridPane.setHalignment(c2, HPos.CENTER);
     }
 
     //Méthodes listeners pour gérer les événements (portent les mêmes noms dans le document .fxml)
@@ -197,6 +182,9 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         checkBoxRMode.setTooltip(new Tooltip("Pénalité de 5 secondes pendant lesquelles un joueur ne peut plus déplacer de cases s’il n’a effectué aucun déplacement pendant "
                 + "10 secondes"));
         CheckBox checkBoxIA = new CheckBox("Jouer avec une IA");
+        ChoiceBox choiceBoxIA = new ChoiceBox();
+        choiceBoxIA.getItems().add("");
+        choiceBoxIA.setValue(choiceBoxIA.getItems().get(0));
 
         VBox fondNouvellePartie = new VBox(7);
         fondNouvellePartie.getChildren().addAll(checkBoxRMode, checkBoxIA, btnNvPartie);
@@ -212,9 +200,27 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         fenetreNouvellePartie.setScene(sceneNouvellePartie);
         fenetreNouvellePartie.show();
 
-        btnNvPartie.setOnAction((ActionEvent event) -> {
-            nouvellePartie(checkBoxRMode.isSelected(), checkBoxIA.isSelected()); //crée une nouvelle partie et passe en paramètre la valeur de la checkBox pour le mode rapide
-            fenetreNouvellePartie.close(); //ferme la nouvelle fenètre au clic sur le bouton "Nouvelle Partie" :
+        double tailleFenetre = fenetreNouvellePartie.getHeight();
+        checkBoxIA.setOnAction((ActionEvent event) -> {
+            if (checkBoxIA.isSelected()) {
+                choiceBoxIA.getItems().clear();
+                choiceBoxIA.getItems().addAll("Aléatoire", "Aléatoire+");
+                choiceBoxIA.setValue(choiceBoxIA.getItems().get(0));
+                fondNouvellePartie.getChildren().add(2, choiceBoxIA);
+                fenetreNouvellePartie.setHeight(tailleFenetre + 50);
+            } else {
+                choiceBoxIA.getItems().clear();
+                choiceBoxIA.getItems().add("");
+                fondNouvellePartie.getChildren().remove(2);
+                fenetreNouvellePartie.setHeight(tailleFenetre);
+            }
+        });
+
+        btnNvPartie.setOnAction((ActionEvent event) -> { //crée une nouvelle partie et passe en paramètre
+            System.out.println(choiceBoxIA.getSelectionModel().getSelectedIndex());
+            ia = checkBoxIA.isSelected();
+            nouvellePartie(checkBoxRMode.isSelected(), choiceBoxIA.getSelectionModel().getSelectedIndex()); //la valeur de la checkBox pour le mode rapide
+            fenetreNouvellePartie.close(); //ferme la nouvelle fenètre au clic sur le bouton "Nouvelle Partie"
         });
     }
 
@@ -266,9 +272,9 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
                     if (b) { //joueur 1 (grilleAffichage gauche)
                         j1.jouer(direction, partieR);
                         if (ia) {
-                            j2.jouer(-2 + (int) (Math.random() * ((2 - -2) + 1)), partieR);
+                            j2.jouer(direction, true);
                         }
-                    } else { //joueur 2 (grilleAffichage droite)
+                    } else if (!ia) { //joueur 2 (grilleAffichage droite)
                         j2.jouer(direction, partieR);
                     }
                 }
@@ -295,7 +301,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
     @FXML
     private void enregistrer() {
         Parser p = new Parser("sauvegarde.2584");
-        p.sauvegarderJoueurs(tabJ);
+        p.sauvegarderJoueurs(j1, j2);
     }
 
     @FXML
@@ -304,16 +310,23 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         if (p.doesFileExists()) {
             ArrayList<Joueur> lJ = p.chargerJoueurs();
             if (lJ.get(lJ.size() - 1) instanceof JoueurHumain) {
-                nouvellePartie(false, false);
+                ia = false;
+                nouvellePartie(false, 0);
             } else {
-                nouvellePartie(false, true);
+                ia = true;
+                if (lJ.get(lJ.size() - 1) instanceof OrdiAleatoire) {
+                    nouvellePartie(false, 0);
+                } else {
+                    nouvellePartie(false, 1);
+                }
             }
             j1.chargerJoueur(lJ.get(0));
             j2.chargerJoueur(lJ.get(1));
             changementStyle(j1.getStyle());
         } else {
             System.out.println("Le fichier n'existe pas, démarrage d'une nouvelle partie.");
-            nouvellePartie(false, false);
+            ia = false;
+            nouvellePartie(false, 0);
         }
     }
 

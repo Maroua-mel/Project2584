@@ -146,14 +146,13 @@
                                 <MenuItem onAction="#fermer" text="Quitter" />
                             </items>
                         </Menu>
-                  <Menu mnemonicParsing="false" text="Paramètres">
-                    <items>
-                      <MenuItem onAction="#modifierInterface" text="Interface" />
-                    </items>
-                  </Menu>
+                        <Menu text="Paramètres">
+                            <items>
+                                <MenuItem onAction="#modifierInterface" text="Interface" />
+                            </items>
+                        </Menu>
                     </menus>
                 </MenuBar>
-                <Button layoutX="32.0" layoutY="129.0" onMouseClicked="#nouvellePartieClient" text="nouvellePartieClient" />
             </children>
         </Pane>
     </children>

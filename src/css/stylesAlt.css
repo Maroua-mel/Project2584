@@ -1,21 +1,21 @@
 @import "stylesBase.css";
 
 AnchorPane, .fd {
-    -fx-background-color: red;
+    -fx-background-color: #b88772;
 }
 
 .label, Button, CheckBox {
-    -fx-text-fill: blue;
+    -fx-text-fill: #fa9073;
 }
 
 .fond {
-    -fx-background-color: yellow;
+    -fx-background-color: #eb9f3d;
 }
 
 .fond Pane {
-    -fx-background-color: green;
+    -fx-background-color: #fcab42;
 }
 
 .scores {
-    -fx-background-color: teal;
+    -fx-background-color: #b05c17;
 }

@@ -52,13 +52,12 @@ public class Parser {
         return null;
     }
 
-    public void sauvegarderJoueurs(Joueur[] lJ) {
+    public void sauvegarderJoueurs(Joueur j1, Joueur j2) {
         try {
             FileOutputStream fos = new FileOutputStream(this.fichier);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            for (Joueur j : lJ) {
-                oos.writeObject(j);
-            }
+            oos.writeObject(j1);
+            oos.writeObject(j2);
             oos.close();
         } catch (IOException ioe) {
             System.out.println("Probleme pendant l'écriture du fichier " + this.fichier.getAbsolutePath());

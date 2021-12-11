@@ -21,7 +21,15 @@ Line {
 }
 
 .tuile {
+    -fx-font-size: 45;
+}
+
+.moyenneTuile {
     -fx-font-size: 40;
+}
+
+.grandeTuile {
+    -fx-font-size: 35;
 }
 
 .table-view .column-header .label {
