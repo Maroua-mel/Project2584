@@ -26,34 +26,50 @@ public class Case implements Parametres, Serializable {
         this.grille = g;
     }
 
+    /** Setter of Grille */
     public void setGrille(Grille g) {
         this.grille = g;
     }
-
+    /** Getter of the abscissa of the tile
+     *@return returns the int of the tile's abscissa
+     */
     public int getX() {
         return this.x;
     }
 
+    /** Getter of the ordinate of the tile
+     *@return returns the int of the tile's ordinate
+     */
     public int getY() {
         return this.y;
     }
 
+    /** Setter of the abscissa of the tile */
     public void setX(int x) {
         this.x = x;
     }
 
+    /** Setter of the ordinate of the tile */
     public void setY(int y) {
         this.y = y;
     }
 
+    /** Setter of the value of the tile */
     public void setValeur(int valeur) {
         this.valeur = valeur;
     }
 
+    /** Getter of the value of the tile */
     public int getValeur() {
         return this.valeur;
     }
 
+    /**
+     * Returns true if and only if there's not an other instance of the given object.
+     * @param obj The object whose values are going to be compared to see if it's the only one
+     * @return returns true if this object has the same hashcode as an other object,
+     * false if it's the only one.
+     */
     @Override
     public boolean equals(Object obj) { // la méthode equals est utilisée lors de l'ajout d'une case à un ensemble pour vérifier qu'il n'y a pas de doublons
         if (obj instanceof Case) { // (teste parmi tous les candidats qui ont le même hashcode)
@@ -64,12 +80,21 @@ public class Case implements Parametres, Serializable {
         }
     }
 
+    /**
+     * Returns an int which represents the hashcode of the abscissa and the ordinate.
+     * @return returns the int of the hashcode
+     */
     @Override
-    public int hashCode() { // détermine le hashcode
+    public int hashCode() {
         return this.x * 7 + this.y * 13;
     }
 
-    //teste si la case courante a la même valeur que la case passée en paramètre et retourne un booléen
+    /**
+     * Returns true if and only if the argument is not null and represents same value as this tile.
+     * @param c The tile that we want to compare with this instance
+     * @return returns true if this object represents the same tile value as the argument,
+     * false if this object doesn't represent the same value.
+     */
     public boolean valeurEgale(Case c) {
         if (c != null) {
             return this.valeur == c.valeur;
@@ -78,6 +103,12 @@ public class Case implements Parametres, Serializable {
         }
     }
 
+    /**
+     * Returns true if and only if the number of a given tile is present in the Fibonacci Sequence (SUITE2).
+     * @param c The tile whose number we want to search in SUITE2
+     * @return returns true if the number of the given tile is present in SUITE2,
+     * false if the number of the tile is not found in SUITE2
+     */
     public boolean valeur2584(Case c) {
         if (c != null) {
             return SUITE2.contains(this.valeur + c.valeur);
@@ -86,7 +117,12 @@ public class Case implements Parametres, Serializable {
         }
     }
 
-    //prend en paramètre une direction et retourne la première case rencontrée dans cette direction en partant de la case courante
+    /**
+     * Returns the nearest tile in a given direction.
+     * @param direction The direction in which we are going to search the nearest tile
+     * @return returns the nearest tile found in the given direction,
+     * if there's no tile met, return null
+     */
     public Case getVoisinDirect(int direction) {
         switch (direction) {
             case HAUT:
@@ -131,8 +167,11 @@ public class Case implements Parametres, Serializable {
         return null;
     }
 
-    //choisit de déterminer la couleur avec une fonction, dans le controlleur. Possibilité alternative de directement mettre un attribut couleur dans
-    //la case
+    /**
+     * Returns the String of the hex color code of each tile for the chosen style of graphic interface.
+     * @param b An int which represents one of the three styles of graphic interface possibilities
+     * @return returns a string that represents a hex color code for each tile.
+     */
     public String detCouleur(int b) {
         switch (b) {
             case 1:
@@ -249,6 +288,11 @@ public class Case implements Parametres, Serializable {
         }
     }
 
+
+    /**
+     * Returns the String which indicates the abscissa, the ordinate and the value of this tile.
+     * @return returns a string that indicates the abscissa, the ordinate and the value of this tile.
+     */
     @Override
     public String toString() {
         return "Case(" + this.x + "," + this.y + "," + this.valeur + ")";
