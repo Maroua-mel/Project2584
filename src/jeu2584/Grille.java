@@ -21,7 +21,12 @@ public class Grille implements Parametres, Serializable {
         this.grille = new HashSet<>();
     }
 
-    public Grille(Grille g) { //permet de cloner une grille
+
+    /*
+    * Allows you to clone a grid
+    * @param g (Grille object)
+    */
+    public Grille(Grille g) { 
         this.grille = new HashSet<>();
         for (Case c : g.grille) {
             Case c1 = new Case(c, this);
@@ -44,14 +49,26 @@ public class Grille implements Parametres, Serializable {
         return result;
     }
 
+    /*
+    * Return grille
+    * Getteur of grille
+    */
     public HashSet<Case> getGrille() {
         return grille;
     }
 
+	/*
+    * Return valeurMax
+    * Getteur of valeurMax
+    */
     public int getValeurMax() {
         return valeurMax;
     }
 
+    /*
+    * Return score
+    * Getteur of score
+    */
     public int getScore() {
         return score;
     }
@@ -60,17 +77,30 @@ public class Grille implements Parametres, Serializable {
         this.grille = ens;
     }
 
+    /*
+    * 
+    * Setteur of score
+    */
     public void setScore(int s) {
         this.score = s;
     }
 
-    public void copierGrille(HashSet<Case> ensTemp) { //copie l'ensemble (grille) actuel dans un ensemble temporaire passé en paramètre
+    /*
+    * Copy current grid
+    * @param ensTemp (Case object from abstract class HashSet)	
+    */
+    public void copierGrille(HashSet<Case> ensTemp) { 
         for (Case c : grille) {
             Case c1 = new Case(c, this);
             ensTemp.add(c1);
         }
     }
 
+    /*
+    * Return a boolean 
+    * Find out if the game is over or not
+    * 
+    */    
     public boolean partieFinie2584() {
         if (this.grille.size() < TAILLE * TAILLE) {
             return false;
@@ -89,8 +119,11 @@ public class Grille implements Parametres, Serializable {
         return true;
     }
 
-    // lanceur de la méthode récursive (les paramètres à passer à cette dernière ne sont pas les mêmes suivant la direction). Retourne 
-    //vrai si au moins une case à bouger (pour éviter de rajouter une nouvelle case si aucun déplacement n’a été possible dans cette direction)
+    
+    /*
+    * Return a boolean, true if at least one tile to move
+    * Recursive method, several parameters on the value of the direction
+    */
     public boolean lanceurDeplacerCases2584(int direction) {
         Case[] extremites = this.getCasesExtremites(direction);
         deplacement = false; // pour vérifier si on a bougé au moins une case après le déplacement, avant d'en rajouter une nouvelle
@@ -113,7 +146,10 @@ public class Grille implements Parametres, Serializable {
         return deplacement;
     }
 
-    // additionne les valeurs des cases passées en paramètre et met éventuellement à jour la variable valeurMax
+    /*
+    * Add values of tiles passed on paramter and updates variable valueMax
+    * @param c (Case object), c2 (object c2)
+    */
     private void fusion2584(Case c, Case c2) {
         score += (c.getValeur() + c2.getValeur());
         c.setValeur(c.getValeur() + c2.getValeur());
@@ -127,6 +163,7 @@ public class Grille implements Parametres, Serializable {
     //on récupère le voisin direct dans la direction opposée, et on le déplace (en vérifiant s’il faut fusionner des cases ou juste déplacer).
     //On continue récursivement jusqu’à ce qu’il n’y ait plus de voisin. Pour éviter les problèmes de doublon avec l’ensemble de cases 
     //(variable grille), lors d’un déplacement il faut retirer la case de la grille, modifier ses coordonnées, la remettre dans la grille au bon endroit.
+
     private void deplacerCasesRecursif2584(Case[] extremites, int rangee, int direction, int compteur) {
         if (extremites[rangee] != null) {
             if ((direction == HAUT && extremites[rangee].getY() != compteur)
@@ -171,20 +208,21 @@ public class Grille implements Parametres, Serializable {
     }
 
     /*
-    * Si direction = HAUT : retourne les 4 cases qui sont le plus en haut (une pour chaque colonne)
-    * Si direction = DROITE : retourne les 4 cases qui sont le plus à droite (une pour chaque ligne)
-    * Si direction = BAS : retourne les 4 cases qui sont le plus en bas (une pour chaque colonne)
-    * Si direction = GAUCHE : retourne les 4 cases qui sont le plus à gauche (une pour chaque ligne)
-    * Attention : le tableau retourné peut contenir des null si les lignes/colonnes sont vides
+    * Return an array of 4 tiles closest to the chosen direction
+    * @param direction(int)
+    * If direction = HAUT : return 4 tiles  who are the most up (one for each column)
+    * If direction = DROITE : return 4 tiles  who are the most right (one for each line)
+    * If direction = BAS : return 4 tiles  who are the most low (one for each column)
+    * If direction = GAUCHE : return 4 tiles  who are the most left (one for each line)
+    * The returned array can contain nulls if the line/columns are empty
      */
-    // retourne sous forme d’un tableau les 4 cases les plus proches de la direction choisie.
     public Case[] getCasesExtremites(int direction) {
         Case[] result = new Case[TAILLE];
         for (Case c : this.grille) {
             switch (direction) {
                 case HAUT:
-                    if ((result[c.getX()] == null) || (result[c.getX()].getY() > c.getY())) { // si on n'avait pas encore de case pour cette rangée
-                        result[c.getX()] = c; //ou si on a trouvé un meilleur candidat
+                    if ((result[c.getX()] == null) || (result[c.getX()].getY() > c.getY())) { 
+                        result[c.getX()] = c; 
                     }
                     break;
                 case BAS:
@@ -207,16 +245,27 @@ public class Grille implements Parametres, Serializable {
         return result;
     }
 
+    /*
+    * Return a victory message
+    *
+    */
     public String victory2584() {
         return "Bravo ! Vous avez atteint " + this.valeurMax + ".";
     }
 
+    /*
+    * Return a defeat message
+    *
+    */
     public String gameOver2584() {
         return "La partie est finie. Votre score est de " + this.score + ".";
     }
 
-    // à condition qu’il reste des emplacements vides dans la grille, positionne aléatoirement (là où il n’y a pas déjà une case) une case avec une 
-    //valeur aléatoire qui peut être soit 1, soit 2. La méthode nouvelleCase2584 retourne un booléen, selon si elle a réussi à ajouter une case ou pas
+    /*
+    * Return a boolean
+    * Add a random tiles in an empty space with a random value ( 1 or 2) if t there are empty spaces in the grid
+    *
+    */
     public boolean nouvelleCase2584() {
         if (this.grille.size() < TAILLE * TAILLE) {
             ArrayList<Case> casesLibres = new ArrayList<>();
