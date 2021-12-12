@@ -1,12 +1,6 @@
 package jeu2584;
 
 import java.io.Serializable;
-import static jeu2584.Parametres.BAS;
-import static jeu2584.Parametres.DROITE;
-import static jeu2584.Parametres.GAUCHE;
-import static jeu2584.Parametres.HAUT;
-import static jeu2584.Parametres.SUITE2;
-import static jeu2584.Parametres.TAILLE;
 
 public class Case implements Parametres, Serializable {
 
@@ -26,11 +20,6 @@ public class Case implements Parametres, Serializable {
         this.grille = g;
     }
 
-    /** Setter of Grille
-     * @param g grid to set*/
-    public void setGrille(Grille g) {
-        this.grille = g;
-    }
     /** Getter of the abscissa of the tile
      *@return returns the int of the tile's abscissa
      */
@@ -44,7 +33,13 @@ public class Case implements Parametres, Serializable {
     public int getY() {
         return this.y;
     }
-
+    
+    /** Setter of Grille
+     * @param g grid to set*/
+    public void setGrille(Grille g) {
+        this.grille = g;
+    }
+    
     /** Setter of the abscissa of the tile
      * @param x abscissa x to set*/
     public void setX(int x) {

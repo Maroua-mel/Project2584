@@ -13,15 +13,24 @@ import javafx.collections.ObservableList;
 // Classe utilisée pour établir une connexion avec la base de données, interroger la base et insérer de nouveaux tuples dans la base
 public class ConnexionBDD implements Runnable {
 
-    private final String host = "mysql-g11-202122-inglog.alwaysdata.net", port = "3306", dbname = "g11-202122-inglog_db2584", username = "249349", password = "2XujDyfxf2K8Myn";
-    private Connection con = null;
+    private final String host;
+    private final String port;
+    private final String dbname;
+    private final String username;
+    private final String password;
+    private Connection con;
     private String requete;
 
     /*
      * Ouvre la connexion avec la base de données
      */
     public ConnexionBDD() {
-
+        this.con = null;
+        this.password = "2XujDyfxf2K8Myn";
+        this.port = "3306";
+        this.dbname = "g11-202122-inglog_db2584";
+        this.username = "249349";
+        this.host = "mysql-g11-202122-inglog.alwaysdata.net";
     }
 
     public void setRequete(String s) {

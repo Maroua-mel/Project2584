@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 
 public class OrdiAleatoirePlus extends Joueur implements Parametres { //choisit une direction aléatoire dans laquelle jouer, mais évite les directions qui ne déplaceraient pas de cases
 
-    private ArrayList<Integer> listeDirections = new ArrayList<>(Arrays.asList(GAUCHE, BAS, HAUT, DROITE)); //liste des directions
+    private ArrayList<Integer> listeDirections; //liste des directions
 
     public OrdiAleatoirePlus(Grille gM, GridPane g, Label s, Label hS, Button b, int c) { //permet de construire un joueur avec une grille identique à celle d'un autre
         super.grilleModele = new Grille(gM); //copie la grille
@@ -27,6 +27,7 @@ public class OrdiAleatoirePlus extends Joueur implements Parametres { //choisit 
             super.hScore = n;
         }
         super.labelScore.setText("0"); //remise à zéro du score affiché
+        listeDirections = new ArrayList<>(Arrays.asList(GAUCHE, BAS, HAUT, DROITE));
     }
 
     @Override

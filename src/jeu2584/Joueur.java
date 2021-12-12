@@ -69,7 +69,7 @@ public abstract class Joueur implements Serializable {
         this.creerGrille();
     }
 
-    public void creerGrille() { //recrée une grille (affichage) à partir de la grille (modèle) passée en paramètre
+    protected void creerGrille() { //recrée une grille (affichage) à partir de la grille (modèle) passée en paramètre
         grilleAffichage.getChildren().clear(); //remise à zéro des grilles (affichage)
         if (listeTuileJ != null) {
             listeTuileJ.clear();
@@ -106,10 +106,10 @@ public abstract class Joueur implements Serializable {
     public void jouer(int direction, boolean partieR) {
     }
 
-    public void jouerC() {
+    protected void jouerC() {
         labelScore.setText(String.valueOf(grilleModele.getScore())); //met à jour le score
         for (Tuile tL : listeTuileJ) { //pour chaque tuile (ensemble case (affichage) et case (modèle) contenue dans la liste du joueur
-            animate(tL.p, tL.xY[0], tL.xY[1], tL.c.getX(), tL.c.getY()); //génère et ajoute les animations à parallelTransition
+            animate(tL.getStackPane(), tL.getX(), tL.getY(), tL.getCaseX(), tL.getCaseY()); //génère et ajoute les animations à parallelTransition
         }
         parallelTransition.setOnFinished(e -> { //quand toutes les transitions sont finies
             grilleModele.nouvelleCase2584(); //ajoute une nouvelle case à la grilleAffichage

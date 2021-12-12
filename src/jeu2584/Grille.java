@@ -5,11 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
-import static jeu2584.Parametres.BAS;
-import static jeu2584.Parametres.DROITE;
-import static jeu2584.Parametres.GAUCHE;
-import static jeu2584.Parametres.HAUT;
-import static jeu2584.Parametres.TAILLE;
 
 public class Grille implements Parametres, Serializable {
 
@@ -20,7 +15,6 @@ public class Grille implements Parametres, Serializable {
     public Grille() {
         this.grille = new HashSet<>();
     }
-
 
     /*
     * Allows you to clone a grid
@@ -67,7 +61,7 @@ public class Grille implements Parametres, Serializable {
 
     /*
     * Return score
-    * Getteur of score
+    * Getter of score
     */
     public int getScore() {
         return score;
@@ -79,7 +73,7 @@ public class Grille implements Parametres, Serializable {
 
     /*
     * 
-    * Setteur of score
+    * Setter of score
     */
     public void setScore(int s) {
         this.score = s;
@@ -216,7 +210,7 @@ public class Grille implements Parametres, Serializable {
     * If direction = GAUCHE : return 4 tiles  who are the most left (one for each line)
     * The returned array can contain nulls if the line/columns are empty
      */
-    public Case[] getCasesExtremites(int direction) {
+    private Case[] getCasesExtremites(int direction) {
         Case[] result = new Case[TAILLE];
         for (Case c : this.grille) {
             switch (direction) {
@@ -263,7 +257,7 @@ public class Grille implements Parametres, Serializable {
 
     /*
     * Return a boolean
-    * Add a random tiles in an empty space with a random value ( 1 or 2) if t there are empty spaces in the grid
+    * Add a random tiles in an empty space with a random value ( 1 or 2) if there are empty spaces in the grid
     *
     */
     public boolean nouvelleCase2584() {

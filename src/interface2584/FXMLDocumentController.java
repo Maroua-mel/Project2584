@@ -51,8 +51,8 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
     // variables globales non définies dans la vue (fichier .fxml)
     private long dureePartie;
     private Joueur j1, j2;
-    private boolean partieT = true, partieR = false, ia; //partieT : si la partie est terminée, pour bloquer les boutons/touches. partieR : si partie est en mode rapide
-    private int couleur = 0;
+    private boolean partieT, partieR, ia; //partieT : si la partie est terminée, pour bloquer les boutons/touches. partieR : si partie est en mode rapide
+    private int couleur;
     private final ArrayList<String> listeStyle = new ArrayList<>(Arrays.asList("css/stylesDefaut.css", "css/stylesAltF4.css", "css/stylesAlt.css"));
 
     private void affichageGameOver(String s, double n) { //place un pane et un label devant une grilleAffichage quand la partie est finie
@@ -172,6 +172,9 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("le contrôleur initialise la vue");
         fond.getStyleClass().add("pane");
+        partieT = true;
+        partieR = false;
+        couleur = 0;
     }
 
     //Méthodes listeners pour gérer les événements (portent les mêmes noms dans le document .fxml)
