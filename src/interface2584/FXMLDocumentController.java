@@ -358,7 +358,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         tableColumnNbDéplacementsJ2.setCellValueFactory(new MapValueFactory<>(5));
         tableViewResultats.getColumns().add(tableColumnNbDéplacementsJ2);
 
-        TableColumn<Map, String> tableColumnDuréePartie = new TableColumn<>("Durée Partie"); //création de la colonne Durée Partie
+        TableColumn<Map, String> tableColumnDuréePartie = new TableColumn<>("Durée Partie (minutes)"); //création de la colonne Durée Partie
         tableColumnDuréePartie.setCellValueFactory(new MapValueFactory<>(6));
         tableViewResultats.getColumns().add(tableColumnDuréePartie);
 
@@ -378,6 +378,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         sceneResultats.getStylesheets().add(fond.getScene().getStylesheets().get(0));
         fenetreResultats.setScene(sceneResultats);
         fenetreResultats.show();
+        fenetreResultats.setWidth(800);
 
         btnFermerResultats.setOnAction((ActionEvent event) -> {
             fenetreResultats.close(); //ferme la nouvelle fenètre au clic sur le bouton "Fermer"

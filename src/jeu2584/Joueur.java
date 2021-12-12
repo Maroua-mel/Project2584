@@ -109,7 +109,7 @@ public abstract class Joueur implements Serializable {
     protected void jouerC() {
         labelScore.setText(String.valueOf(grilleModele.getScore())); //met à jour le score
         for (Tuile tL : listeTuileJ) { //pour chaque tuile (ensemble case (affichage) et case (modèle) contenue dans la liste du joueur
-            animate(tL.getStackPane(), tL.getX(), tL.getY(), tL.getCaseX(), tL.getCaseY()); //génère et ajoute les animations à parallelTransition
+            animate(tL); //génère et ajoute les animations à parallelTransition
         }
         parallelTransition.setOnFinished(e -> { //quand toutes les transitions sont finies
             grilleModele.nouvelleCase2584(); //ajoute une nouvelle case à la grilleAffichage
@@ -120,18 +120,18 @@ public abstract class Joueur implements Serializable {
         nbMouvements++;
     }
 
-    protected void animate(Node t, int xOrigine, int yOrigine, int xNV, int yNV) { //https://stackoverflow.com/questions/59269930/is-there-a-way-to-animate-elements-in-gridpane
+    protected void animate(Tuile tL) { //https://stackoverflow.com/questions/59269930/is-there-a-way-to-animate-elements-in-gridpane
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.millis(100));
-        translateTransition.setToX((xNV - xOrigine) * (grilleAffichage.getPrefHeight() / 4));
-        translateTransition.setToY((yNV - yOrigine) * (grilleAffichage.getPrefWidth() / 4));
-        translateTransition.setNode(t);
+        translateTransition.setToX((tL.getCaseX() - tL.getX()) * (grilleAffichage.getPrefHeight() / 4));
+        translateTransition.setToY((tL.getCaseY() - tL.getY()) * (grilleAffichage.getPrefWidth() / 4));
+        translateTransition.setNode(tL.getStackPane());
 
         translateTransition.setOnFinished(e -> { //quand l'animation est finie, on retire la case de sa position d'origine
-            grilleAffichage.getChildren().remove(t); //on ajoute la case à sa nouvelle position et on met ses valeurs translate à 0
-            t.setTranslateX(0);
-            t.setTranslateY(0);
-            grilleAffichage.add(t, xNV, yNV);
+            grilleAffichage.getChildren().remove(tL.getStackPane()); //on ajoute la case à sa nouvelle position et on met ses valeurs translate à 0
+            tL.getStackPane().setTranslateX(0);
+            tL.getStackPane().setTranslateY(0);
+            grilleAffichage.add(tL.getStackPane(), tL.getCaseX(), tL.getCaseY());
         });
 
         parallelTransition.getChildren().add(translateTransition);
