@@ -114,7 +114,6 @@ public abstract class Joueur implements Serializable {
         parallelTransition.setOnFinished(e -> { //quand toutes les transitions sont finies
             grilleModele.nouvelleCase2584(); //ajoute une nouvelle case à la grilleAffichage
             creerGrille();  //recrée une grilleAffichage (affichage) à partir de la grilleAffichage (modèle) passée en paramètre
-            System.out.println(grilleModele);
         });
         parallelTransition.play(); //joue les transitions
         parallelTransition.getChildren().clear();
@@ -148,11 +147,13 @@ public abstract class Joueur implements Serializable {
                 this.buttonAnnuler.setDisable(false);
             }
         }
-        this.hScore = j.hScore;
+        this.getGrilleModele().setScore(j.getGrilleModele().getScore());
+        labelScore.setText(String.valueOf(this.getGrilleModele().getScore()));
         this.nbMouvements = j.nbMouvements;
         int h = Integer.parseInt(labelHScore.getText()); //met le label meilleur score à jour si nécessaire
         if (this.hScore > h) { //le mettre à jour quoi qu'il arrive plutôt ?
             labelHScore.setText(String.valueOf(this.hScore));
+            this.hScore = j.hScore;
         }
         this.creerGrille();
     }

@@ -141,7 +141,7 @@ public class Grille implements Parametres, Serializable {
     }
 
     /*
-    * Add values of tiles passed on paramter and updates variable valueMax
+    * Add values of tiles passed on parameter and updates variable valueMax
     * @param c (Case object), c2 (object c2)
     */
     private void fusion2584(Case c, Case c2) {
@@ -157,7 +157,6 @@ public class Grille implements Parametres, Serializable {
     //on récupère le voisin direct dans la direction opposée, et on le déplace (en vérifiant s’il faut fusionner des cases ou juste déplacer).
     //On continue récursivement jusqu’à ce qu’il n’y ait plus de voisin. Pour éviter les problèmes de doublon avec l’ensemble de cases 
     //(variable grille), lors d’un déplacement il faut retirer la case de la grille, modifier ses coordonnées, la remettre dans la grille au bon endroit.
-
     private void deplacerCasesRecursif2584(Case[] extremites, int rangee, int direction, int compteur) {
         if (extremites[rangee] != null) {
             if ((direction == HAUT && extremites[rangee].getY() != compteur)

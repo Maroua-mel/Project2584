@@ -117,8 +117,6 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
             j2 = new JoueurHumain(j1.getGrilleModele(), grille2, score2, hScore2, annuler2, couleur);
         }
 
-        System.out.println(j1.getGrilleModele());
-        System.out.println("Clic de souris sur le bouton menu");
         partieT = false; //met la booléenne partie terminée à faux
         dureePartie = System.currentTimeMillis();
     }
@@ -139,9 +137,6 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         ChoiceBox choiceBoxStyle = new ChoiceBox();
         choiceBoxStyle.getItems().addAll("Défaut", "Style 1", "Style 2");
         choiceBoxStyle.setValue(choiceBoxStyle.getItems().get(couleur));
-        choiceBoxStyle.setOnAction((e) -> {
-            changementStyle(choiceBoxStyle.getSelectionModel().getSelectedIndex());
-        });
 
         VBox fondModifierInterface = new VBox(3);
         fondModifierInterface.getChildren().addAll(choiceBoxStyle, btnFermerStyle);
@@ -170,7 +165,6 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("le contrôleur initialise la vue");
         fond.getStyleClass().add("pane");
         partieT = true;
         partieR = false;
@@ -220,7 +214,6 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
         });
 
         btnNvPartie.setOnAction((ActionEvent event) -> { //crée une nouvelle partie et passe en paramètre
-            System.out.println(choiceBoxIA.getSelectionModel().getSelectedIndex());
             ia = checkBoxIA.isSelected();
             nouvellePartie(checkBoxRMode.isSelected(), choiceBoxIA.getSelectionModel().getSelectedIndex()); //la valeur de la checkBox pour le mode rapide
             fenetreNouvellePartie.close(); //ferme la nouvelle fenètre au clic sur le bouton "Nouvelle Partie"
@@ -229,8 +222,6 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
 
     @FXML
     private void keyPressed(KeyEvent ke) {
-        sauvegarder.setDisable(false); //réactive la touche pour sauvegarder 
-        System.out.println("touche appuyée");
         if (!partieT) {
             if (!j1.getGrilleModele().partieFinie2584() && !j2.getGrilleModele().partieFinie2584()) {
                 String touche = ke.getText().toLowerCase();
@@ -272,6 +263,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
                 }
 
                 if (b != null) { //si la touche appuyée fait partie des touches possibles
+                    sauvegarder.setDisable(false); //réactive la touche pour sauvegarder 
                     if (b) { //joueur 1 (grilleAffichage gauche)
                         j1.jouer(direction, partieR);
                         if (ia) {
@@ -337,7 +329,7 @@ public class FXMLDocumentController implements Initializable, jeu2584.Parametres
     private void resultats() { //récupère les données de la BDD et les affiche dans une table, dans une nouvelle fenêtre
         ConnexionBDD c = new ConnexionBDD(); //http://tutorials.jenkov.com/javafx/tableview.html#using-maps-as-data-items
         ObservableList<Map<Integer, String>> oLResultats
-                = c.getTuples("SELECT scoreJoueur1, scoreJoueur2, tuileMaxJoueur1, tuileMaxJoueur2, nombreDeplacementJoueur1, nombreDeplacementJoueur2, dureePartie FROM resultats LIMIT 10;");
+                = c.getTuples();
         //récupération des données
         Button btnFermerResultats = new Button("Fermer"); //création du bouton pour fermer la fenêtre
         TableView tableViewResultats = new TableView(); //création de la table pour visualiser les résultats

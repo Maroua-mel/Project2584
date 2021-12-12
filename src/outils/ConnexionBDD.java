@@ -78,10 +78,11 @@ public class ConnexionBDD implements Runnable {
      * et retourne les résultats sous forme d'une liste de String.
      * Il faut utiliser la méthode executeQuery dans la classe Statement (voir cours 12).
      */
-    public ObservableList<Map<Integer, String>> getTuples(String query) {
+    public ObservableList<Map<Integer, String>> getTuples() {
         ObservableList<Map<Integer, String>> resultats
                 = FXCollections.<Map<Integer, String>>observableArrayList();
         try {
+            String query = "SELECT scoreJoueur1, scoreJoueur2, tuileMaxJoueur1, tuileMaxJoueur2, nombreDeplacementJoueur1, nombreDeplacementJoueur2, dureePartie FROM resultats LIMIT 10;";
             Class.forName("com.mysql.jdbc.Driver").getDeclaredConstructor().newInstance();
             con = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.dbname, this.username, this.password);
             System.out.println("Database connection established.");

@@ -6,6 +6,7 @@
 .pane {
     -fx-background-radius: 5px;
 }
+
 GridPane {
     -fx-grid-lines-visible: true;
     -fx-background-radius: 5px;

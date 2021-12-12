@@ -17,6 +17,7 @@ public class MainFX extends Application {
         boolean add = scene.getStylesheets().add("css/stylesDefaut.css");
 
         stage.setScene(scene);
+        stage.setTitle("2584");
         stage.show();
     }
 

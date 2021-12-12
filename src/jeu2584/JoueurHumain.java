@@ -31,9 +31,8 @@ public class JoueurHumain extends Joueur {
         super.buttonAnnuler.setOnMouseClicked(e -> {
             super.grilleModele = new Grille(super.grillePrec); //écrase la grilleAffichage (modèle) actuelle avec la grilleAffichage (modèle) stockée
             creerGrille(); //re-crée la grilleAffichage (affichage) à partir de la nouvelle grilleAffichage (modèle)
-            System.out.println(super.grilleModele);
             super.nbAnnuls--;
-            super.buttonAnnuler.setDisable(true); //réactive le bouton pour annuler
+            super.buttonAnnuler.setDisable(true); //désactive le bouton pour annuler
             super.labelScore.setText(String.valueOf(super.grilleModele.getScore())); //met à jour le labelScore (affiché) du joueur
         });
         creerGrille();
@@ -55,7 +54,7 @@ public class JoueurHumain extends Joueur {
                 System.out.println("Le joueur est PUNI car il est LENT");
             } else {
                 if (this.grillePrec != null && this.getNbAnnuls() > 0) { //si l'ensemble (grilleAffichage) précédent n'est pas vide
-                    this.buttonAnnuler.setDisable(false); //active le bouton pour buttonAnnuler
+                    this.buttonAnnuler.setDisable(false); //active le bouton pour annuler
                 }
                 this.dernierEJ = (System.currentTimeMillis());
                 HashSet<Case> ensTemp = new HashSet<>(); //crée un ensemble de cases pour sauvegarder la grille avant de faire le déplacement

@@ -26,8 +26,7 @@ public class OrdiAleatoire extends Joueur {
 
     @Override
     public void jouer(int d, boolean partieR) {
-        int direction = -2 + (int) (Math.random() * ((2 - -2) + 1));
-        boolean b2 = grilleModele.lanceurDeplacerCases2584(direction);
+        boolean b2 = grilleModele.lanceurDeplacerCases2584(-2 + (int) (Math.random() * ((2 - -2) + 1)));
         if (b2) { //si on déplace au moins une case
             super.jouerC();
         }
